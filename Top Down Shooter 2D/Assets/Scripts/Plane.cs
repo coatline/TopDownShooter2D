@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Plane : MonoBehaviour
 {
-    [SerializeField] Vector2[] startPositions;
-    [SerializeField] Vector2[] endPositions;
-    [SerializeField] float speed;
+    [SerializeField] Vector2[] startPositions = null;
+    [SerializeField] Vector2[] endPositions = null;
+    [SerializeField] float speed = 0;
     Vector3 startPos;
     Vector3 endPos;
+    bool done;
 
     void Start()
     {
@@ -31,12 +32,30 @@ public class Plane : MonoBehaviour
 
     void Update()
     {
-        if (transform.position == endPos)
+        if (transform.position == endPos && !done)
         {
-            print("Done!");
-            return;
+            var player = FindObjectOfType<Player>();
+
+            if (!player.GetComponent<Player>().jumped)
+            {
+                player.GetComponent<Player>().Jump();
+            }
+
+            if (transform.childCount > 0)
+            {
+                transform.DetachChildren();
+            }
+                StartCoroutine(DoDie(0.4f));
+            //Destroy(gameObject);
         }
 
         transform.position = Vector3.MoveTowards(transform.position, endPos, Time.deltaTime * speed);
+    }
+
+    IEnumerator DoDie(float delay)
+    {
+        done = true;
+        yield return new WaitForSeconds(delay);
+        Destroy(gameObject);
     }
 }

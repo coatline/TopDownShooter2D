@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Cam : MonoBehaviour
 {
-    [SerializeField] GameObject target;
+    [SerializeField] GameObject target = null;
 
     void Start()
     {
@@ -14,7 +14,7 @@ public class Cam : MonoBehaviour
         }
     }
 
-    void Update()
+    void LateUpdate()
     {
         transform.position = target.transform.position - new Vector3(0, 0, 10);
     }
