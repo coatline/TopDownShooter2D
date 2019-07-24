@@ -40,7 +40,7 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E) && landed)
             {
                 collision.gameObject.SetActive(false);
-                sm.OpenSlot().ChangeItem(collision.gameObject);
+                sm.OpenSlot().ChangeItem(collision.gameObject, selectedSlot);
             }
         }
         else if (collision.gameObject.CompareTag("Water"))
@@ -128,12 +128,7 @@ public class Player : MonoBehaviour
 
         if (!landed) return;
 
-        sm.SlotDisabledGroundItemFollow(transform);
-
-        if (selectedSlot.item)
-        {
-            ShowItemHolding();
-        }
+        sm.SlotDisabledGroundItemFollow(transform.Find("HoldingPlace").transform);
     }
 
     void LookAtMouse()
@@ -141,15 +136,6 @@ public class Player : MonoBehaviour
         Vector3 dir = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
-    }
-
-    void ShowItemHolding()
-    {
-        if (selectedSlot.item)
-        {
-            selectedSlot.itemHolder.GetComponent<SpriteRenderer>().sprite = selectedSlot.item.inHandSprite;
-            selectedSlot.itemHolder.gameObject.SetActive(true);
-        }
     }
 
     void EnableOrDisableChildren(bool trueorfalse)
