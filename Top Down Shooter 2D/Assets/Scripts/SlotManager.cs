@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class SlotManager : MonoBehaviour
 {
+    [SerializeField] Player player;
     public Slot selectedSlot;
     public List<Slot> slots;
     int selSlotIndex;
@@ -12,7 +13,20 @@ public class SlotManager : MonoBehaviour
     void Start()
     {
         selectedSlot = slots[selSlotIndex];
-        selectedSlot.GetComponent<Image>().color = Color.white;
+        player.selectedSlot = selectedSlot;
+        selectedSlot.Select();
+    }
+
+    public void SlotDisabledGroundItemFollow(Transform tran)
+    {
+        for (int i = 0; i < slots.Count; i++)
+        {
+            if (slots[i].itemHolder)
+            {
+                slots[i].itemHolder.transform.position = tran.position;
+                slots[i].itemHolder.transform.rotation = tran.rotation;
+            }
+        }
     }
 
     private void Update()
@@ -48,7 +62,7 @@ public class SlotManager : MonoBehaviour
 
     void ChangeSelected(int amount)
     {
-        selectedSlot.GetComponent<Image>().color = Color.black;
+        selectedSlot.DeSelect();
 
         if ((selSlotIndex) + amount > slots.Count - 1)
         {
@@ -65,6 +79,9 @@ public class SlotManager : MonoBehaviour
 
         selectedSlot = slots[selSlotIndex];
 
-        selectedSlot.GetComponent<Image>().color = Color.white;
+        selectedSlot.Select();
+
+        player.selectedSlot = selectedSlot;
     }
+
 }

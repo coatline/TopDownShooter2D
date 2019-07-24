@@ -5,49 +5,43 @@ using UnityEngine;
 
 public class Slot : MonoBehaviour
 {
+    public GameObject itemHolder;
     Image holderImage;
     public Item item;
 
     private void Awake()
     {
-        holderImage = GetComponentInChildren<Image>();
+        holderImage = transform.Find("Holder").GetComponent<Image>();
     }
 
-    public void DropItem(Transform pos)
+    public void DropItem(Transform tra)
     {
-        var dropItem = new GameObject();
-
-        dropItem.AddComponent<Item>();
-
-        var dropItemScript = dropItem.GetComponent<Item>();
-
-        dropItemScript.SetAllVariables(item.groundSprite, item.slotSprite, item.itemType, item.rarity);
-
-        if (item.itemType == "Gun")
-        {
-            dropItem.AddComponent<Gun>();
-
-            if (dropItem.GetComponent<Gun>().gunType == "AR")
-            {
-                dropItem.AddComponent<AR>();
-            }
-
-            dropItem.AddComponent<SpriteRenderer>();
-
-            dropItem.GetComponent<SpriteRenderer>().sprite = item.groundSprite;
-        }
-
-        dropItem.AddComponent<CircleCollider2D>();
-
-        dropItem.GetComponent<CircleCollider2D>().isTrigger = true;
+        itemHolder.transform.position = tra.position;
+        itemHolder.SetActive(true);
+        itemHolder = null;
+        holderImage.sprite = null;
+        holderImage.color = new Color(0, 0, 0, 0);
 
         item = null;
     }
 
-    public void ChangeItem(Item newItem)
+    public void DeSelect()
     {
-        item = newItem;
-        holderImage.sprite = item.slotSprite;
+        var imageScript = GetComponent<Image>();
+        imageScript.color = new Color(imageScript.color.r, imageScript.color.g, imageScript.color.b, .5f);
+    }
+
+    public void Select()
+    {
+        var imageScript = GetComponent<Image>();
+        imageScript.color = new Color(imageScript.color.r, imageScript.color.g, imageScript.color.b, 1f);
+    }
+
+    public void ChangeItem(GameObject groundedItem)
+    {
+        itemHolder = groundedItem;
+        item = groundedItem.GetComponent<Item>();
+        holderImage.sprite = item.groundSprite;
         holderImage.color = Color.white;
     }
 }

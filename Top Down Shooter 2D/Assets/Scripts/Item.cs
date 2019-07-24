@@ -6,16 +6,18 @@ public class Item : MonoBehaviour
 {
     //rarity is chance to drop
     public Sprite groundSprite;
-    public Sprite slotSprite;
+    public Sprite inHandSprite;
     public string itemType;
-    public float rarity;
+    public string itemName;
+    public string rarity;
 
-    public void SetAllVariables(Sprite theGroundSprite, Sprite theSlotSprite, string theItemType, float theRarity)
+    public void SetAllVariables(Sprite theGroundSprite, Sprite theInHandSprite, string theItemType, string theRarity, string theName)
     {
         groundSprite = theGroundSprite;
-        slotSprite = theSlotSprite;
+        inHandSprite = theInHandSprite;
         itemType = theItemType;
         rarity = theRarity;
+        itemName = theName;
     }
 
     //public Item(string type, float rarity, string name)

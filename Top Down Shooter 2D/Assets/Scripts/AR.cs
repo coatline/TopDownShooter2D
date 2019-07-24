@@ -7,15 +7,12 @@ public class AR : MonoBehaviour
     [SerializeField] Bullet bulletPrefab;
     public float burstDelay;
     public float shotRate;
-    public string name;
     float timer;
     Gun gun;
 
     private void Awake()
     {
         gun = GetComponent<Gun>();
-
-        Shoot();
     }
 
     public void CalculateShotTime()
@@ -33,7 +30,7 @@ public class AR : MonoBehaviour
 
     void Shoot()
     {
-        var newBullet = Instantiate(bulletPrefab);
+        var newBullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
         var bulletScript = newBullet.GetComponent<Bullet>();
         bulletScript.lifeTime = gun.bulletLifeTime;
         bulletScript.dmg = gun.damagePerBullet;
