@@ -40,6 +40,12 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E) && landed)
             {
                 collision.gameObject.SetActive(false);
+
+                if (!sm.OpenSlot())
+                {
+                    selectedSlot.DropItem(transform);
+                }
+
                 sm.OpenSlot().ChangeItem(collision.gameObject, selectedSlot);
             }
         }

@@ -18,41 +18,47 @@ public class ItemGenerator : MonoBehaviour
 
     public void GenerateItem(Vector3 pos)
     {
-        if(itemPrefabs.Count == 0)
+        if (itemPrefabs.Count == 0)
         {
-            Debug.LogError("No items in pool"); 
+            Debug.LogError("No items in pool");
         }
 
-        //common uncommon rare epic mythic
-        // 40%     30%    15%   10%   5%
+        //common uncommon rare epic legendary mythic
+        // 35%     30%     18%   10%    5%      2%
 
         var r = Random.Range(0, 101);
 
-        if (r <= 40)
+        if (r <= 35)
         {
             //Spawn COMMON item
             var newItem = Instantiate(RandomItem(), pos, Quaternion.identity);
             newItem.GetComponent<Item>().rarity = "Common";
         }
-        else if (r > 40 && r <= 70)
+        else if (r > 35 && r <= 65)
         {
             //Spawn UNCOMMON item
             var newItem = Instantiate(RandomItem(), pos, Quaternion.identity);
             newItem.GetComponent<Item>().rarity = "Uncommon";
         }
-        else if (r > 70 && r <= 85)
+        else if (r > 65 && r <= 83)
         {
             //Spawn RARE item
             var newItem = Instantiate(RandomItem(), pos, Quaternion.identity);
             newItem.GetComponent<Item>().rarity = "Rare";
         }
-        else if (r > 85 && r <= 95)
+        else if (r > 83 && r <= 93)
         {
             //Spawn EPIC item
             var newItem = Instantiate(RandomItem(), pos, Quaternion.identity);
             newItem.GetComponent<Item>().rarity = "Epic";
         }
-        else
+        else if (r > 93 && r <= 97)
+        {
+            //Spawn Legendary item
+            var newItem = Instantiate(RandomItem(), pos, Quaternion.identity);
+            newItem.GetComponent<Item>().rarity = "Legendary";
+        }
+        else if (r > 97 && r <= 100)
         {
             //Spawn MYTHIC item
             var newItem = Instantiate(RandomItem(), pos, Quaternion.identity);

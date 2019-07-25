@@ -6,11 +6,13 @@ using UnityEngine;
 public class Slot : MonoBehaviour
 {
     public GameObject itemHolder;
+    Image backgroundImage;
     Image holderImage;
     public Item item;
 
     private void Awake()
     {
+        backgroundImage = transform.Find("Background Sprite").GetComponent<Image>();
         holderImage = transform.Find("Holder").GetComponent<Image>();
     }
 
@@ -55,11 +57,47 @@ public class Slot : MonoBehaviour
         holderImage.sprite = item.groundSprite;
         holderImage.color = Color.white;
 
+        //if already selected slot enable inhand sprite for gun
         if (selectedSlot == this)
         {
             itemHolder.gameObject.SetActive(true);
             itemHolder.GetComponent<CircleCollider2D>().enabled = false;
             itemHolder.GetComponent<SpriteRenderer>().sprite = itemHolder.GetComponent<Item>().inHandSprite;
         }
+
+        SetColorToRarity(backgroundImage, item);
+    }
+
+    void SetColorToRarity(Image image, Item item)
+    {
+        if (item.itemType != "Gun") { return; }
+
+        var r = item.rarity;
+
+        if (r == "Common")
+        {
+            image.color = Color.gray;
+        }
+        else if (r == "Uncommon")
+        {
+            image.color = Color.green;
+        }
+        else if (r == "Rare")
+        {
+            image.color = Color.blue;
+        }
+        else if (r == "Epic")
+        {
+            image.color = new Color(.5f, .05f, .75f);
+        }
+        else if (r == "Legendary")
+        {
+            image.color = Color.yellow;
+        }
+        else if (r == "Mythic")
+        {
+            image.color = Color.red;
+        }
+
     }
 }

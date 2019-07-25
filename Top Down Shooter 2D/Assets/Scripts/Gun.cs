@@ -10,4 +10,30 @@ public class Gun : MonoBehaviour
     public string gunType; //Shotgun, AR, 
     public float aimError;
     //public float ammo;
+
+    private void Start()
+    {
+        var gunrarity = GetComponent<Item>().rarity;
+
+        if (gunrarity == "Common")
+        {
+            //stay the same?
+        }
+        else if (gunrarity == "Uncommon")
+        {
+            damagePerBullet++;
+        }
+        else if (gunrarity == "Rare")
+        {
+            damagePerBullet += 2;
+        }
+        else if (gunrarity == "Legendary")
+        {
+            damagePerBullet += 4;
+        }
+        else
+        {
+            damagePerBullet += 10;
+        }
+    }
 }

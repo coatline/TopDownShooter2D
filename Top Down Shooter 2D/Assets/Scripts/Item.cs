@@ -11,19 +11,12 @@ public class Item : MonoBehaviour
     public string itemName;
     public string rarity;
 
-    public void SetAllVariables(Sprite theGroundSprite, Sprite theInHandSprite, string theItemType, string theRarity, string theName)
-    {
-        groundSprite = theGroundSprite;
-        inHandSprite = theInHandSprite;
-        itemType = theItemType;
-        rarity = theRarity;
-        itemName = theName;
-    }
-
-    //public Item(string type, float rarity, string name)
+    //public void SetAllVariables(Sprite theGroundSprite, Sprite theInHandSprite, string theItemType, string theRarity, string theName)
     //{
-    //    itemType = type;
-    //    itemRarity = rarity;
-    //    itemName = name;
+    //    groundSprite = theGroundSprite;
+    //    inHandSprite = theInHandSprite;
+    //    itemType = theItemType;
+    //    rarity = theRarity;
+    //    itemName = theName;
     //}
 }

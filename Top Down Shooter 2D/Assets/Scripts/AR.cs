@@ -30,7 +30,7 @@ public class AR : MonoBehaviour
 
     void Shoot()
     {
-        var newBullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        var newBullet = Instantiate(bulletPrefab, transform.Find("Bullet Hole").transform.position, Quaternion.identity);
         var bulletScript = newBullet.GetComponent<Bullet>();
         bulletScript.lifeTime = gun.bulletLifeTime;
         bulletScript.dmg = gun.damagePerBullet;
