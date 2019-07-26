@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class AR : MonoBehaviour
 {
-    [SerializeField] Bullet bulletPrefab;
+    [SerializeField] Bullet bulletPrefab = null;
     public float burstDelay;
     public float shotRate;
+    public Player player = null;
+    Gun gun = null;
     float timer;
-    Gun gun;
 
     private void Awake()
     {
@@ -34,6 +35,7 @@ public class AR : MonoBehaviour
         var bulletScript = newBullet.GetComponent<Bullet>();
         bulletScript.lifeTime = gun.bulletLifeTime;
         bulletScript.dmg = gun.damagePerBullet;
+        bulletScript.player = player;
         newBullet.GetComponent<Rigidbody2D>().AddForce(transform.up * gun.bulletSpeed);
         newBullet.transform.rotation = transform.rotation;
     }

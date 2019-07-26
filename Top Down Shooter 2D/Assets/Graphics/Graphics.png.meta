@@ -41,6 +41,9 @@ TextureImporter:
   - first:
       213: 6106740496235502331
     second: Crate
+  - first:
+      213: -7717128300933111095
+    second: OutlineofTestGun
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -394,7 +397,7 @@ TextureImporter:
         width: 12
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -402,6 +405,27 @@ TextureImporter:
       bones: []
       spriteID: ab9903dd256f4df49ae6803b60fda0dc
       internalID: 6106740496235502331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OutlineofTestGun
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 171
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c278b2f7f03cbcc438c271a9c2a51959
+      internalID: -7717128300933111095
       vertices: []
       indices: 
       edges: []

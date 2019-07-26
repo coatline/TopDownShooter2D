@@ -4,12 +4,7 @@ using UnityEngine;
 
 public class ItemGenerator : MonoBehaviour
 {
-    [SerializeField] List<Item> itemPrefabs;
-
-    void Start()
-    {
-
-    }
+    [SerializeField] List<Item> itemPrefabs = null;
 
     Item RandomItem()
     {
@@ -24,17 +19,17 @@ public class ItemGenerator : MonoBehaviour
         }
 
         //common uncommon rare epic legendary mythic
-        // 35%     30%     18%   10%    5%      2%
+        // 40%     25%     18%   10%    5%      2%
 
         var r = Random.Range(0, 101);
 
-        if (r <= 35)
+        if (r <= 40)
         {
             //Spawn COMMON item
             var newItem = Instantiate(RandomItem(), pos, Quaternion.identity);
             newItem.GetComponent<Item>().rarity = "Common";
         }
-        else if (r > 35 && r <= 65)
+        else if (r > 40 && r <= 65)
         {
             //Spawn UNCOMMON item
             var newItem = Instantiate(RandomItem(), pos, Quaternion.identity);

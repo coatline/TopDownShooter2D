@@ -18,22 +18,30 @@ public class Slot : MonoBehaviour
 
     public void DropItem(Transform tra)
     {
+        if (item.itemType == "Gun")
+        {
+            itemHolder.transform.Find("Outline").gameObject.SetActive(true);
+        }
+
         itemHolder.GetComponent<SpriteRenderer>().sprite = item.groundSprite;
         itemHolder.GetComponent<CircleCollider2D>().enabled = true;
         itemHolder.transform.position = tra.position;
         itemHolder.SetActive(true);
         itemHolder = null;
+        item = null;
+
         holderImage.sprite = null;
         holderImage.color = new Color(0, 0, 0, 0);
+        backgroundImage.color = new Color(0, 0, 0, 0);
 
-        item = null;
     }
 
     public void DeSelect()
     {
         var imageScript = GetComponent<Image>();
         imageScript.color = new Color(imageScript.color.r, imageScript.color.g, imageScript.color.b, .5f);
-        if (item)
+
+        if (item && itemHolder)
         {
             itemHolder.gameObject.SetActive(false);
         }
@@ -41,9 +49,11 @@ public class Slot : MonoBehaviour
 
     public void Select()
     {
+
         var imageScript = GetComponent<Image>();
         imageScript.color = new Color(imageScript.color.r, imageScript.color.g, imageScript.color.b, 1f);
-        if (item)
+
+        if (item && itemHolder)
         {
             itemHolder.gameObject.SetActive(true);
             itemHolder.GetComponent<SpriteRenderer>().sprite = itemHolder.GetComponent<Item>().inHandSprite;
@@ -61,11 +71,17 @@ public class Slot : MonoBehaviour
         if (selectedSlot == this)
         {
             itemHolder.gameObject.SetActive(true);
-            itemHolder.GetComponent<CircleCollider2D>().enabled = false;
             itemHolder.GetComponent<SpriteRenderer>().sprite = itemHolder.GetComponent<Item>().inHandSprite;
         }
 
+        itemHolder.GetComponent<CircleCollider2D>().enabled = false;
+
         SetColorToRarity(backgroundImage, item);
+
+        if (item.itemType == "Gun")
+        {
+            itemHolder.transform.Find("Outline").gameObject.SetActive(false);
+        }
     }
 
     void SetColorToRarity(Image image, Item item)
@@ -84,11 +100,11 @@ public class Slot : MonoBehaviour
         }
         else if (r == "Rare")
         {
-            image.color = Color.blue;
+            image.color = Color.cyan;
         }
         else if (r == "Epic")
         {
-            image.color = new Color(.5f, .05f, .75f);
+            image.color = new Color(.9f, .1f, .9f);
         }
         else if (r == "Legendary")
         {

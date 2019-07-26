@@ -19,4 +19,13 @@ public class Item : MonoBehaviour
     //    rarity = theRarity;
     //    itemName = theName;
     //}
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Pickupable"))
+        {
+            transform.position = Vector3.MoveTowards(transform.position, collision.gameObject.transform.position, -Time.deltaTime);
+        }
+    }
+
 }

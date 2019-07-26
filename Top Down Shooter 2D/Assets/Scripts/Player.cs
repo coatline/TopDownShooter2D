@@ -7,23 +7,30 @@ using TMPro;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] Canvas worldSpaceCanvas = null;
     [SerializeField] Sprite parachuteSprite = null;
-    [SerializeField] float parachuteMoveSpeed = 7;
-    [SerializeField] float parachuteFallSpeed = 3;
     [SerializeField] TMP_Text bottomText = null;
-    [SerializeField] float groundWalkSpeed = 0;
-    [SerializeField] float waterWalkSpeed = 0;
-    [SerializeField] Image fallBarFill = null;
-    [SerializeField] float freeFallSpeed = 0;
+    [SerializeField] Image fallBarPrefab = null;
     [SerializeField] SlotManager sm = null;
-    [SerializeField] float speed = 0;
     public Slot selectedSlot = null;
     SpriteRenderer sr = null;
+    Image fallBarFill = null;
     Rigidbody2D rb = null;
-    public bool jumped;
+
     Vector3 movement;
+
+    public bool landed;
+    public bool jumped;
     bool hasGun;
-    bool landed;
+
+    public int health = 100;
+    public int kills;
+
+    [SerializeField] float freeFallSpeed = 0;
+    [SerializeField] float parachuteFallSpeed = 3;
+    [SerializeField] float parachuteMoveSpeed = 7;
+    public float groundWalkSpeed = 0;
+    public float speed = 0;
 
     void Awake()
     {
@@ -31,36 +38,6 @@ public class Player : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
 
         EnableOrDisableChildren(false);
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Pickupable"))
-        {
-            if (Input.GetKeyDown(KeyCode.E) && landed)
-            {
-                collision.gameObject.SetActive(false);
-
-                if (!sm.OpenSlot())
-                {
-                    selectedSlot.DropItem(transform);
-                }
-
-                sm.OpenSlot().ChangeItem(collision.gameObject, selectedSlot);
-            }
-        }
-        else if (collision.gameObject.CompareTag("Water"))
-        {
-            speed = waterWalkSpeed;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Water"))
-        {
-            speed = groundWalkSpeed;
-        }
     }
 
     void Update()
@@ -71,7 +48,7 @@ public class Player : MonoBehaviour
             SceneManager.LoadScene(scene.buildIndex);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.Space))
         {
             if (!jumped)
             {
@@ -95,6 +72,7 @@ public class Player : MonoBehaviour
                 {
                     if (selectedSlot.item.GetComponent<Gun>().gunType == "AR")
                     {
+                        selectedSlot.item.GetComponent<AR>().player = this;
                         selectedSlot.item.GetComponent<AR>().CalculateShotTime();
                     }
                 }
@@ -111,6 +89,8 @@ public class Player : MonoBehaviour
 
         if (jumped && !landed)
         {
+            fallBarFill.transform.parent.transform.position = transform.position - new Vector3(3, 0, 0);
+
             if (!Input.GetKey(KeyCode.Space))
             {
                 fallBarFill.fillAmount -= parachuteFallSpeed * Time.deltaTime;
@@ -163,7 +143,8 @@ public class Player : MonoBehaviour
 
     public void Jump()
     {
-        fallBarFill.transform.parent.gameObject.SetActive(true);
+        var yah = Instantiate(fallBarPrefab, transform.position, Quaternion.Euler(0,0,90), worldSpaceCanvas.transform);
+        fallBarFill = yah.transform.Find("Fill").GetComponent<Image>();
         bottomText.gameObject.SetActive(false);
         sr.sprite = parachuteSprite;
         speed = parachuteMoveSpeed;
@@ -171,28 +152,76 @@ public class Player : MonoBehaviour
         jumped = true;
     }
 
-    bool lastOnWater;
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Pickupable"))
+        {
+            if (Input.GetKeyDown(KeyCode.E) && landed)
+            {
+                collision.gameObject.SetActive(false);
 
-    //void CheckForWater()
-    //{
-    //    RaycastHit2D hit = Physics2D.Raycast(transform.position, -Vector2.up);
+                if (!sm.OpenSlot())
+                {
+                    selectedSlot.DropItem(transform);
+                }
 
-    //    if (hit)
-    //    {
-    //        if (hit.transform.gameObject.CompareTag("Water"))
-    //        {
-    //            lastOnWater = true;
-    //            print("ONWATWE");
-    //            speed = waterWalkSpeed;
-    //        }
-    //        else
-    //        {
-    //            if (lastOnWater)
-    //            {
-    //                speed = groundWalkSpeed;
-    //            }
-    //            lastOnWater = false;
-    //        }
-    //    }
-    //}
+                sm.OpenSlot().ChangeItem(collision.gameObject, selectedSlot);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                collision.gameObject.SetActive(false);
+
+                if (sm.slots[0].item)
+                {
+                    sm.slots[0].DropItem(transform);
+                }
+
+                sm.slots[0].ChangeItem(collision.gameObject, selectedSlot);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                collision.gameObject.SetActive(false);
+
+                if (sm.slots[1].item)
+                {
+                    sm.slots[1].DropItem(transform);
+                }
+
+                sm.slots[1].ChangeItem(collision.gameObject, selectedSlot);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                collision.gameObject.SetActive(false);
+
+                if (sm.slots[2].item)
+                {
+                    sm.slots[2].DropItem(transform);
+                }
+
+                sm.slots[2].ChangeItem(collision.gameObject, selectedSlot);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                collision.gameObject.SetActive(false);
+
+                if (sm.slots[3].item)
+                {
+                    sm.slots[3].DropItem(transform);
+                }
+
+                sm.slots[3].ChangeItem(collision.gameObject, selectedSlot);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                collision.gameObject.SetActive(false);
+
+                if (sm.slots[4].item)
+                {
+                    sm.slots[4].DropItem(transform);
+                }
+
+                sm.slots[4].ChangeItem(collision.gameObject, selectedSlot);
+            }
+        }
+    }
 }

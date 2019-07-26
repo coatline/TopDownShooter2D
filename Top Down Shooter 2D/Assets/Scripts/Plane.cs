@@ -28,6 +28,7 @@ public class Plane : MonoBehaviour
         Vector3 dir = startPos - endPos;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle + 90);
+
     }
 
     void Update()

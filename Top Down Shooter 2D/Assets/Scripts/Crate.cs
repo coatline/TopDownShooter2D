@@ -18,6 +18,10 @@ public class Crate : MonoBehaviour
         {
             Open();
         }
+        else if (collision.gameObject.CompareTag("Bot"))
+        {
+            Open();
+        }
         else if (collision.gameObject.CompareTag("Bullet"))
         {
             health--;

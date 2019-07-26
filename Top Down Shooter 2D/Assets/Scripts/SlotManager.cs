@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class SlotManager : MonoBehaviour
 {
-    [SerializeField] Player player;
-    public Slot selectedSlot;
-    public List<Slot> slots;
-    int selSlotIndex;
+    [SerializeField] Player player = null;
+    public Slot selectedSlot = null;
+    public List<Slot> slots = null;
+    int selSlotIndex = 0;
 
     void Start()
     {
