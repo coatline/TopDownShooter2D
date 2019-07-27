@@ -19,21 +19,20 @@ public class Bot : MonoBehaviour
     float parachuteMoveSpeed = 9;
     float freeFallSpeed = .25f;
     public float groundWalkSpeed = 0;
+    List<GameObject> seenCrates;
     public bool landed = false;
     State state = new State();
     Image fallBarFill = null;
     SpriteRenderer sr = null;
     List<Item> items = null;
     public float speed = 0;
-    List<Crate> seenCrates;
     BoxCollider2D trigger;
     bool jumped = false;
     GameObject target;
-    Vector3 dir;
 
     void Start()
     {
-        seenCrates = new List<Crate>();
+        seenCrates = new List<GameObject>();
 
         trigger = transform.Find("Trigger").GetComponent<BoxCollider2D>();
 
@@ -54,14 +53,20 @@ public class Bot : MonoBehaviour
             trigger.enabled = false;
         }
 
-        dir = transform.position - new Vector3(transform.position.x + Random.Range(-5, 5), transform.position.y + Random.Range(-5, 5));
-
         state = State.searching;
     }
 
     void Update()
     {
         trigger.gameObject.transform.rotation = Quaternion.identity;
+
+        for (int i = 0; i < seenCrates.Count; i++)
+        {
+            if (!seenCrates[i])
+            {
+                seenCrates.RemoveAt(i);
+            }
+        }
 
         if (!jumped)
         {
@@ -70,8 +75,7 @@ public class Bot : MonoBehaviour
 
         if (state == State.searching)
         {
-            transform.rotation = Quaternion.identity;
-            transform.Translate(dir);
+            transform.Translate(.1f, 0, 0, Space.Self);
         }
 
         if (state == State.getting)
@@ -81,18 +85,20 @@ public class Bot : MonoBehaviour
                 Vector3 dir = transform.position - target.transform.position;
                 float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
                 transform.rotation = Quaternion.Euler(0, 0, angle + 90);
-                var toTarget = (target.transform.position - transform.position).normalized;
-                transform.Translate(toTarget * speed * Time.deltaTime);
+
+                transform.Translate(.1f, 0,0,Space.Self);
+                //var toTarget = (target.transform.position - transform.position).normalized;
+                //transform.Translate(toTarget * speed * Time.deltaTime);
             }
             else
             {
-                if (seenCrates.Count == 0)
+                if (seenCrates.Count > 0)
                 {
-                    state = State.searching;
+                    ChooseTarget();
                 }
                 else
                 {
-                    ChooseNewTarget();
+                    state = State.searching;
                 }
             }
         }
@@ -112,25 +118,16 @@ public class Bot : MonoBehaviour
         }
     }
 
-    void ChooseNewTarget()
-    {
-        if (seenCrates.Count == 0) { state = State.searching; return; }
-        target = seenCrates[0].gameObject;
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Crate"))
+        if (collision.gameObject.CompareTag("Crate") && landed)
         {
             for (int i = 0; i < seenCrates.Count; i++)
             {
-                if (seenCrates[i].gameObject == collision.gameObject)
+                if (seenCrates[i] == collision.gameObject)
                 {
-                    seenCrates.Remove(seenCrates[i]);
-
-                    state = State.searching;
-
-                    ChooseNewTarget();
+                    seenCrates.RemoveAt(i);
+                    break;
                 }
             }
         }
@@ -140,17 +137,25 @@ public class Bot : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Crate") && state == State.searching)
         {
-            seenCrates.Add(collision.gameObject.GetComponent<Crate>());
-            state = State.getting;
+            AddToSeen(collision.gameObject);
+
+            if (state != State.attacking)
+            {
+                state = State.getting;
+            }
         }
         else if (collision.gameObject.CompareTag("Pickupable"))
         {
-            state = State.searching;
+            AddToSeen(collision.gameObject);
+
+            if (state != State.attacking)
+            {
+                state = State.getting;
+            }
         }
         else if (collision.gameObject.CompareTag("Player"))
         {
-            target = collision.gameObject;
-            state = State.getting;
+            
         }
         else if (collision.gameObject.CompareTag("Water"))
         {
@@ -158,9 +163,33 @@ public class Bot : MonoBehaviour
         }
     }
 
+    void AddToSeen(GameObject obj)
+    {
+        seenCrates.Add(obj);
+    }
+
+    void ChooseTarget()
+    {
+        GameObject closest = null;
+
+        for (int i = 0; i < seenCrates.Count; i++)
+        {
+            if (!closest)
+            {
+                closest = seenCrates[i];
+            }
+            else if (Vector2.Distance(transform.position, seenCrates[i].transform.position) < Vector2.Distance(transform.position, closest.transform.position))
+            {
+                closest = seenCrates[i];
+            }
+        }
+
+        target = closest;
+    }
+
     void ChangeDir()
     {
-        dir = transform.position - new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), 0);
+        Vector3 dir = transform.position - new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), 0);
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle + 90);
     }

@@ -10,14 +10,13 @@ public class Water : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            if (!collision.gameObject.GetComponent<Player>().landed) { return; }
-            collision.gameObject.GetComponent<Player>().speed = waterWalkSpeed;
-            print("WATER!");
+            if (!collision.gameObject.GetComponentInParent<Player>().landed) { return; }
+            collision.gameObject.GetComponentInParent<Player>().speed = waterWalkSpeed;
         }
         else if (collision.gameObject.CompareTag("Bot"))
         {
-            if (!collision.gameObject.GetComponent<Bot>().landed) { return; }
-            collision.gameObject.GetComponent<Bot>().speed = waterWalkSpeed;
+            if (!collision.gameObject.GetComponentInParent<Bot>().landed) { return; }
+            collision.gameObject.GetComponentInParent<Bot>().speed = waterWalkSpeed;
         }
     }
 
@@ -25,14 +24,14 @@ public class Water : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            if (!collision.gameObject.GetComponent<Player>().landed) { return; }
-            var script = collision.gameObject.GetComponent<Player>();
+            if (!collision.gameObject.GetComponentInParent<Player>().landed) { return; }
+            var script = collision.gameObject.GetComponentInParent<Player>();
             script.speed = script.groundWalkSpeed;
         }
         else if (collision.gameObject.CompareTag("Bot"))
         {
-            if (!collision.gameObject.GetComponent<Bot>().landed) { return; }
-            var script = collision.gameObject.GetComponent<Bot>();
+            if (!collision.gameObject.GetComponentInParent<Bot>().landed) { return; }
+            var script = collision.gameObject.GetComponentInParent<Bot>();
             script.speed = script.groundWalkSpeed;
         }
     }

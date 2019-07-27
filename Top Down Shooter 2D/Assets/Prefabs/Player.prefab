@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8551260564923417867}
   m_Layer: 10
   m_Name: HoldingPlace
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -82,19 +82,19 @@ MonoBehaviour:
   worldSpaceCanvas: {fileID: 0}
   parachuteSprite: {fileID: -4471634583465917618, guid: 918068b0049524b4681bcfc7b5baea89,
     type: 3}
-  parachuteMoveSpeed: 9
-  parachuteFallSpeed: 0.1
   bottomText: {fileID: 0}
   fallBarPrefab: {fileID: 0}
-  groundWalkSpeed: 7
-  waterWalkSpeed: 4
-  freeFallSpeed: 0.25
   sm: {fileID: 0}
-  speed: 5
   selectedSlot: {fileID: 0}
-  health: 100
+  landed: 0
   jumped: 0
+  health: 100
   kills: 0
+  freeFallSpeed: 0.25
+  parachuteFallSpeed: 0.1
+  parachuteMoveSpeed: 9
+  groundWalkSpeed: 7
+  speed: 5
 --- !u!50 &9118597216416987336
 Rigidbody2D:
   serializedVersion: 4
@@ -176,7 +176,7 @@ GameObject:
   - component: {fileID: 9118597216664607861}
   m_Layer: 10
   m_Name: Arm
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -256,7 +256,7 @@ GameObject:
   - component: {fileID: 9118597217180775791}
   m_Layer: 10
   m_Name: Arm
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -337,7 +337,7 @@ GameObject:
   - component: {fileID: 9118597218047140341}
   m_Layer: 10
   m_Name: Head
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
