@@ -12,6 +12,7 @@ public class Water : MonoBehaviour
         {
             if (!collision.gameObject.GetComponent<Player>().landed) { return; }
             collision.gameObject.GetComponent<Player>().speed = waterWalkSpeed;
+            print("WATER!");
         }
         else if (collision.gameObject.CompareTag("Bot"))
         {

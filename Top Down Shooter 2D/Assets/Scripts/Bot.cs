@@ -23,20 +23,26 @@ public class Bot : MonoBehaviour
     State state = new State();
     Image fallBarFill = null;
     SpriteRenderer sr = null;
-    BoxCollider2D bc = null;
     List<Item> items = null;
     public float speed = 0;
+    List<Crate> seenCrates;
+    BoxCollider2D trigger;
     bool jumped = false;
     GameObject target;
+    Vector3 dir;
 
     void Start()
     {
+        seenCrates = new List<Crate>();
+
+        trigger = transform.Find("Trigger").GetComponent<BoxCollider2D>();
+
         sr = GetComponent<SpriteRenderer>();
-        bc = GetComponent<BoxCollider2D>();
 
         items = new List<Item>();
 
         Invoke("Jump", Random.Range(0f, 20f));
+
         if (transform.parent == null)
         {
             jumped = true;
@@ -45,12 +51,18 @@ public class Bot : MonoBehaviour
         else
         {
             EnableOrDisableChildren(false);
-            bc.enabled = false;
+            trigger.enabled = false;
         }
+
+        dir = transform.position - new Vector3(transform.position.x + Random.Range(-5, 5), transform.position.y + Random.Range(-5, 5));
+
+        state = State.searching;
     }
 
     void Update()
     {
+        trigger.gameObject.transform.rotation = Quaternion.identity;
+
         if (!jumped)
         {
             transform.position = transform.parent.transform.position;
@@ -58,19 +70,31 @@ public class Bot : MonoBehaviour
 
         if (state == State.searching)
         {
-            transform.Translate(.1f, 0, 0);
+            transform.rotation = Quaternion.identity;
+            transform.Translate(dir);
         }
 
         if (state == State.getting)
         {
             if (target != null)
             {
+                Vector3 dir = transform.position - target.transform.position;
+                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                transform.rotation = Quaternion.Euler(0, 0, angle + 90);
                 var toTarget = (target.transform.position - transform.position).normalized;
                 transform.Translate(toTarget * speed * Time.deltaTime);
-                //transform.position = Vector3.MoveTowards(transform.position, target.transform.position, .1f);
             }
             else
-                state = State.searching;
+            {
+                if (seenCrates.Count == 0)
+                {
+                    state = State.searching;
+                }
+                else
+                {
+                    ChooseNewTarget();
+                }
+            }
         }
 
         if (jumped && !landed)
@@ -81,10 +105,33 @@ public class Bot : MonoBehaviour
             transform.localScale -= new Vector3(parachuteFallSpeed / 2, parachuteFallSpeed / 2) * Time.deltaTime;
             fallBarFill.color = Color.white;
 
-
             if (fallBarFill.fillAmount <= 0)
             {
                 Land();
+            }
+        }
+    }
+
+    void ChooseNewTarget()
+    {
+        if (seenCrates.Count == 0) { state = State.searching; return; }
+        target = seenCrates[0].gameObject;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Crate"))
+        {
+            for (int i = 0; i < seenCrates.Count; i++)
+            {
+                if (seenCrates[i].gameObject == collision.gameObject)
+                {
+                    seenCrates.Remove(seenCrates[i]);
+
+                    state = State.searching;
+
+                    ChooseNewTarget();
+                }
             }
         }
     }
@@ -93,8 +140,7 @@ public class Bot : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Crate") && state == State.searching)
         {
-            target = collision.gameObject;
-            print(collision.gameObject.name);
+            seenCrates.Add(collision.gameObject.GetComponent<Crate>());
             state = State.getting;
         }
         else if (collision.gameObject.CompareTag("Pickupable"))
@@ -106,6 +152,17 @@ public class Bot : MonoBehaviour
             target = collision.gameObject;
             state = State.getting;
         }
+        else if (collision.gameObject.CompareTag("Water"))
+        {
+            ChangeDir();
+        }
+    }
+
+    void ChangeDir()
+    {
+        dir = transform.position - new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), 0);
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angle + 90);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -132,6 +189,7 @@ public class Bot : MonoBehaviour
     {
         for (int i = 0; i < transform.childCount; i++)
         {
+            if (transform.GetChild(i).name == "Trigger") { continue; }
             transform.GetChild(i).gameObject.SetActive(trueorfalse);
         }
     }
@@ -146,7 +204,7 @@ public class Bot : MonoBehaviour
         sr.sprite = parachuteSprite;
         speed = parachuteMoveSpeed;
         transform.parent = null;
-        bc.enabled = true;
+        trigger.enabled = true;
         jumped = true;
     }
 }
