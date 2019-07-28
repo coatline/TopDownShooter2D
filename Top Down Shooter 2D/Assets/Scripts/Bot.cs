@@ -7,6 +7,7 @@ public class Bot : MonoBehaviour
 {
     enum State
     {
+        goingToLand,
         searching,
         getting,
         attacking
@@ -27,11 +28,17 @@ public class Bot : MonoBehaviour
     List<Item> items = null;
     public float speed = 0;
     BoxCollider2D trigger;
+    BoxCollider2D headbc;
     bool jumped = false;
     GameObject target;
+    GameObject land;
 
     void Start()
     {
+        headbc = transform.Find("Head").GetComponent<BoxCollider2D>();
+
+        land = GameObject.FindGameObjectWithTag("Land");
+
         seenCrates = new List<GameObject>();
 
         trigger = transform.Find("Trigger").GetComponent<BoxCollider2D>();
@@ -56,6 +63,8 @@ public class Bot : MonoBehaviour
         state = State.searching;
     }
 
+    bool startedCoroutine;
+
     void Update()
     {
         trigger.gameObject.transform.rotation = Quaternion.identity;
@@ -75,20 +84,34 @@ public class Bot : MonoBehaviour
 
         if (state == State.searching)
         {
-            transform.Translate(.1f, 0, 0, Space.Self);
-        }
+            if (seenCrates.Count == 0)
+            {
+                transform.Translate(.1f, 0, 0);
 
-        if (state == State.getting)
+                if (!startedCoroutine)
+                {
+                    StartCoroutine(Search());
+                }
+            }
+            else
+            {
+                state = State.getting;
+            }
+        }
+        else if (state == State.getting)
         {
+            startedCoroutine = false;
+            StopAllCoroutines();
+
             if (target != null)
             {
-                Vector3 dir = transform.position - target.transform.position;
-                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.Euler(0, 0, angle + 90);
+                //Vector3 dir = transform.position - target.transform.position;
+                //float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                //transform.rotation = Quaternion.Euler(0, 0, angle + 90);
 
-                transform.Translate(.1f, 0,0,Space.Self);
-                //var toTarget = (target.transform.position - transform.position).normalized;
-                //transform.Translate(toTarget * speed * Time.deltaTime);
+                //transform.Translate(.1f, 0,0,Space.Self);
+                var toTarget = (target.transform.position - transform.position).normalized;
+                transform.Translate(toTarget * speed * Time.deltaTime);
             }
             else
             {
@@ -101,6 +124,10 @@ public class Bot : MonoBehaviour
                     state = State.searching;
                 }
             }
+        }
+        else if (state == State.goingToLand)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, land.transform.position, .1f);
         }
 
         if (jumped && !landed)
@@ -116,6 +143,14 @@ public class Bot : MonoBehaviour
                 Land();
             }
         }
+    }
+
+    IEnumerator Search()
+    {
+        startedCoroutine = true;
+        yield return new WaitForSeconds(5f);
+        transform.rotation = Quaternion.Euler(new Vector3(Random.Range(-1, 1), Random.Range(-10, 10), 0f));
+        StartCoroutine(Search());
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -137,6 +172,8 @@ public class Bot : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Crate") && state == State.searching)
         {
+            if (seenCrates.Contains(collision.gameObject)) { return; }
+
             AddToSeen(collision.gameObject);
 
             if (state != State.attacking)
@@ -146,19 +183,28 @@ public class Bot : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Pickupable"))
         {
-            AddToSeen(collision.gameObject);
+            //AddToSeen(collision.gameObject);
 
-            if (state != State.attacking)
-            {
-                state = State.getting;
-            }
+            //if (state != State.attacking)
+            //{
+            //    state = State.getting;
+            //}
         }
         else if (collision.gameObject.CompareTag("Player"))
         {
-            
+
         }
         else if (collision.gameObject.CompareTag("Water"))
         {
+            if (landed && collision.IsTouching(headbc))
+            {
+                state = State.goingToLand;
+            }
+            else if (!landed)
+            {
+                state = State.goingToLand;
+            }
+
             ChangeDir();
         }
     }
@@ -196,10 +242,16 @@ public class Bot : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Crate"))
+        if (collision.gameObject.CompareTag("Water"))
         {
-            if (target == collision.gameObject)
-                state = State.searching;
+            if (seenCrates.Count > 0)
+            {
+                state = State.getting;
+            }
+            else
+            {
+                state = State.goingToLand;
+            }
         }
     }
 

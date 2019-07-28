@@ -9,6 +9,7 @@ TagManager:
   - Bullet
   - Crate
   - Bot
+  - Land
   layers:
   - Default
   - TransparentFX
