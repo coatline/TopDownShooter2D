@@ -28,6 +28,7 @@ public class Bot : MonoBehaviour
     Image fallBarFill = null;
     SpriteRenderer sr = null;
     List<Item> items = null;
+    Item currentItem;
     public float speed = 0;
     BoxCollider2D trigger;
     BoxCollider2D headbc;
@@ -86,10 +87,7 @@ public class Bot : MonoBehaviour
             }
             else if (seenItems[i].CompareTag("Pickupable"))
             {
-                if (seenItems[i].GetComponent<Item>().onGround == false)
-                {
-                    seenItems.RemoveAt(i);
-                }
+                seenItems.RemoveAt(i);
             }
         }
 
@@ -204,10 +202,13 @@ public class Bot : MonoBehaviour
         }
         else if (state == State.fleeingFromStorm)
         {
+            //TODO MAKE SURE STORM IS MOVING
+
             if (Vector3.Distance(transform.position, dc.transform.position) <= dc.targetScale.x / 2.75f)
             {
                 state = State.searching;
             }
+
             transform.position = Vector3.MoveTowards(transform.position, dc.transform.position, .1f);
         }
     }
@@ -269,13 +270,10 @@ public class Bot : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Pickupable"))
         {
-            if (collision.gameObject.GetComponent<Item>().onGround == true)
+            AddToSeen(collision.gameObject);
+            if (state != State.attacking && state != State.fleeingFromStorm)
             {
-                AddToSeen(collision.gameObject);
-                if (state != State.attacking && state != State.fleeingFromStorm)
-                {
-                    state = State.getting;
-                }
+                state = State.getting;
             }
 
         }
@@ -333,7 +331,10 @@ public class Bot : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("DeathCircle"))
         {
-            state = State.fleeingFromStorm;
+            if (collision.gameObject.GetComponent<DeathCircle>().isMoving)
+            {
+                state = State.fleeingFromStorm;
+            }
         }
     }
 

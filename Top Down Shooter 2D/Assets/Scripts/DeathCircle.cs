@@ -8,6 +8,7 @@ public class DeathCircle : MonoBehaviour
     [SerializeField] GameObject[] sides;
     public Vector3 targetScale;
     Vector3 beforeScale;
+    public bool isMoving;
     List<Transform> sidePos;
     Vector3 targetPos;
     bool canStartNewPhase;
@@ -39,7 +40,6 @@ public class DeathCircle : MonoBehaviour
         {
             transform.localScale -= targetScale / 500;
             transform.position = Vector3.MoveTowards(transform.position, targetPos, .2f);
-
             //for (int j = 0; j < sides.Length; j++)
             //{
             //    sides[j].transform.position = sidePos[j].position;
@@ -66,6 +66,7 @@ public class DeathCircle : MonoBehaviour
         SetValues();
         Invoke("NewPhase", Random.Range(3f, 5f));
         canStartNewPhase = false;
+        isMoving = false;
     }
 
     void SetValues()
@@ -89,5 +90,6 @@ public class DeathCircle : MonoBehaviour
     {
         canStartNewPhase = true;
         canMove = true;
+        isMoving = true;
     }
 }

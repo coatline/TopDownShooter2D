@@ -24,8 +24,8 @@ public class Player : MonoBehaviour
     public bool jumped;
     bool hasGun;
 
-    public int shield = 100;
     public int health = 100;
+    public int shield = 0;
     public int kills;
 
     [SerializeField] float freeFallSpeed = 0;
@@ -40,6 +40,8 @@ public class Player : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
 
         EnableOrDisableChildren(false);
+
+        UpdateHealthUI();
     }
 
     void Update()
@@ -85,7 +87,6 @@ public class Player : MonoBehaviour
         {
             if (selectedSlot.item != null)
             {
-                selectedSlot.item.onGround = true;
                 selectedSlot.DropItem(transform);
             }
         }
@@ -118,6 +119,28 @@ public class Player : MonoBehaviour
         if (!landed) return;
 
         sm.SlotDisabledGroundItemFollow(transform.Find("HoldingPlace").transform);
+    }
+
+    void Heal(int amount, bool isShield)
+    {
+        if (isShield)
+        {
+            shield += amount;
+            if(shield > 100)
+            {
+                shield = 100;
+            }
+        }
+        else
+        {
+            health += amount;
+            if (health > 100)
+            {
+                health = 100;
+            }
+        }
+
+        UpdateHealthUI();
     }
 
     public void TakeDmg(int damage)
@@ -203,7 +226,6 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E) && landed)
             {
                 collision.gameObject.SetActive(false);
-                collision.gameObject.GetComponent<Item>().onGround = false;
 
                 if (!sm.OpenSlot())
                 {
@@ -212,7 +234,6 @@ public class Player : MonoBehaviour
 
                 sm.OpenSlot().ChangeItem(collision.gameObject, selectedSlot);
 
-                TakeDmg(5);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha1))
             {

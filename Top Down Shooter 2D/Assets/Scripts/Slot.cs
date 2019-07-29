@@ -23,9 +23,9 @@ public class Slot : MonoBehaviour
             itemHolder.transform.Find("Outline").gameObject.SetActive(true);
         }
 
+        itemHolder.tag = "Pickupable";
         itemHolder.GetComponent<SpriteRenderer>().sprite = item.groundSprite;
         itemHolder.GetComponent<CircleCollider2D>().enabled = true;
-        itemHolder.GetComponent<Item>().onGround = true;
         itemHolder.transform.position = tra.position + new Vector3(Random.Range(-.5f,.5f), Random.Range(-.5f, .5f));
         itemHolder.SetActive(true);
         itemHolder = null;
@@ -67,6 +67,7 @@ public class Slot : MonoBehaviour
         item = groundedItem.GetComponent<Item>();
         holderImage.sprite = item.groundSprite;
         holderImage.color = Color.white;
+        itemHolder.tag = "Untagged";
 
         //if already selected slot enable inhand sprite for gun
         if (selectedSlot == this)
@@ -84,7 +85,6 @@ public class Slot : MonoBehaviour
             itemHolder.transform.Find("Outline").gameObject.SetActive(false);
         }
 
-        itemHolder.GetComponent<Item>().onGround = false;
     }
 
     void SetColorToRarity(Image image, Item item)

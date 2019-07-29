@@ -25,7 +25,7 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Bullet") || collision.gameObject.CompareTag("Pickupable") || collision.gameObject.CompareTag("Eyes") || collision.gameObject.CompareTag("DeathCircle")) { return; }
+        if (collision.gameObject.CompareTag("Bullet") || collision.gameObject.CompareTag("Pickupable") || collision.gameObject.CompareTag("Eyes") || collision.gameObject.CompareTag("DeathCircle") || collision.gameObject.CompareTag("Water")) { return; }
 
         else
         {
