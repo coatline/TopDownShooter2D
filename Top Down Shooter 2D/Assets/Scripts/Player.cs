@@ -223,5 +223,9 @@ public class Player : MonoBehaviour
                 sm.slots[4].ChangeItem(collision.gameObject, selectedSlot);
             }
         }
+        else if (collision.gameObject.CompareTag("DeathCircle"))
+        {
+            print("OWOWOWOWOWOW");
+        }
     }
 }

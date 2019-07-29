@@ -7,10 +7,12 @@ public class Bot : MonoBehaviour
 {
     enum State
     {
+        fleeingFromStorm,
         goingToLand,
         searching,
         getting,
-        attacking
+        attacking,
+        fleeing
     }
 
     public Image fallBarPrefab = null;
@@ -32,20 +34,23 @@ public class Bot : MonoBehaviour
     bool jumped = false;
     GameObject target;
     GameObject land;
+    List<GameObject> attackers;
+    DeathCircle dc;
 
     void Start()
     {
+        seenCrates = new List<GameObject>();
+        attackers = new List<GameObject>();
+        items = new List<Item>();
+
         headbc = transform.Find("Head").GetComponent<BoxCollider2D>();
+        trigger = transform.Find("Trigger").GetComponent<BoxCollider2D>();
 
         land = GameObject.FindGameObjectWithTag("Land");
 
-        seenCrates = new List<GameObject>();
-
-        trigger = transform.Find("Trigger").GetComponent<BoxCollider2D>();
+        dc = FindObjectOfType<DeathCircle>();
 
         sr = GetComponent<SpriteRenderer>();
-
-        items = new List<Item>();
 
         Invoke("Jump", Random.Range(0f, 20f));
 
@@ -82,6 +87,25 @@ public class Bot : MonoBehaviour
             transform.position = transform.parent.transform.position;
         }
 
+        DoStates();
+
+        if (jumped && !landed)
+        {
+            fallBarFill.transform.parent.transform.position = transform.position - new Vector3(3, 0, 0);
+
+            fallBarFill.fillAmount -= parachuteFallSpeed * Time.deltaTime;
+            transform.localScale -= new Vector3(parachuteFallSpeed / 2, parachuteFallSpeed / 2) * Time.deltaTime;
+            fallBarFill.color = Color.white;
+
+            if (fallBarFill.fillAmount <= 0)
+            {
+                Land();
+            }
+        }
+    }
+
+    void DoStates()
+    {
         if (state == State.searching)
         {
             if (seenCrates.Count == 0)
@@ -111,7 +135,7 @@ public class Bot : MonoBehaviour
 
                 //transform.Translate(.1f, 0,0,Space.Self);
                 var toTarget = (target.transform.position - transform.position).normalized;
-                transform.Translate(toTarget * speed * Time.deltaTime);
+                transform.Translate(toTarget * speed * Time.deltaTime, Space.World);
             }
             else
             {
@@ -128,21 +152,72 @@ public class Bot : MonoBehaviour
         else if (state == State.goingToLand)
         {
             transform.position = Vector3.MoveTowards(transform.position, land.transform.position, .1f);
-        }
 
-        if (jumped && !landed)
-        {
-            fallBarFill.transform.parent.transform.position = transform.position - new Vector3(3, 0, 0);
-
-            fallBarFill.fillAmount -= parachuteFallSpeed * Time.deltaTime;
-            transform.localScale -= new Vector3(parachuteFallSpeed / 2, parachuteFallSpeed / 2) * Time.deltaTime;
-            fallBarFill.color = Color.white;
-
-            if (fallBarFill.fillAmount <= 0)
+            if (Vector2.Distance(transform.position, land.transform.position) <= 100)
             {
-                Land();
+                if (seenCrates.Count > 0)
+                {
+                    state = State.getting;
+                }
+                else
+                {
+                    state = State.searching;
+                }
             }
         }
+        else if (state == State.attacking)
+        {
+            if (items.Count > 0)
+            {
+                state = State.attacking;
+
+            }
+        }
+        else if (state == State.fleeing)
+        {
+            if (attackers.Count == 0)
+            {
+                state = State.searching;
+            }
+            else
+            {
+                if (items.Count > 0)
+                {
+                    state = State.attacking;
+                }
+                else
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, ClosestAttacker().transform.position, -.1f);
+                }
+            }
+        }
+        else if (state == State.fleeingFromStorm)
+        {
+            if (Vector3.Distance(transform.position, dc.transform.position) <= dc.targetScale.x / 2.75f)
+            {
+                state = State.searching;
+            }
+            transform.position = Vector3.MoveTowards(transform.position, dc.transform.position, .1f);
+        }
+    }
+
+    GameObject ClosestAttacker()
+    {
+        GameObject closest = null;
+
+        for (int i = 0; i < attackers.Count; i++)
+        {
+            if (!closest)
+            {
+                closest = attackers[i];
+            }
+            else if (Vector2.Distance(transform.position, attackers[i].transform.position) < Vector2.Distance(transform.position, closest.transform.position))
+            {
+                closest = attackers[i];
+            }
+        }
+
+        return closest;
     }
 
     IEnumerator Search()
@@ -176,23 +251,58 @@ public class Bot : MonoBehaviour
 
             AddToSeen(collision.gameObject);
 
-            if (state != State.attacking)
+            if (state != State.attacking && state != State.fleeingFromStorm)
             {
                 state = State.getting;
             }
         }
         else if (collision.gameObject.CompareTag("Pickupable"))
         {
-            //AddToSeen(collision.gameObject);
+            AddToSeen(collision.gameObject);
 
-            //if (state != State.attacking)
-            //{
-            //    state = State.getting;
-            //}
+            if (state != State.attacking && state != State.fleeingFromStorm)
+            {
+                state = State.getting;
+            }
         }
-        else if (collision.gameObject.CompareTag("Player"))
+        else if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Bot") && landed)
         {
+            if (landed)
+            {
+                if (items.Count > 0)
+                {
+                    state = State.attacking;
+                }
+                else
+                {
+                    if (collision.gameObject.CompareTag("Player"))
+                    {
+                        if (collision.gameObject.GetComponent<Player>().selectedSlot.item)
+                        {
+                            state = State.fleeing;
+                        }
+                    }
+                    else
+                    {
+                        //if (collision.IsTouching(headbc))
+                        //{
+                        //    if (collision.gameObject.GetComponentInParent<Bot>().items.Count > 0)
+                        //    {
+                        //        state = State.fleeing;
+                        //    }
+                        //}
+                        //else
+                        {
+                            if (collision.gameObject.GetComponentInParent<Bot>().items.Count > 0)
+                            {
+                                state = State.fleeing;
+                            }
+                        }
+                    }
+                }
 
+                attackers.Add(collision.gameObject);
+            }
         }
         else if (collision.gameObject.CompareTag("Water"))
         {
@@ -206,6 +316,10 @@ public class Bot : MonoBehaviour
             }
 
             ChangeDir();
+        }
+        else if (collision.gameObject.CompareTag("DeathCircle"))
+        {
+            state = State.fleeingFromStorm;
         }
     }
 
@@ -238,21 +352,6 @@ public class Bot : MonoBehaviour
         Vector3 dir = transform.position - new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), 0);
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle + 90);
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Water"))
-        {
-            if (seenCrates.Count > 0)
-            {
-                state = State.getting;
-            }
-            else
-            {
-                state = State.goingToLand;
-            }
-        }
     }
 
     void Land()

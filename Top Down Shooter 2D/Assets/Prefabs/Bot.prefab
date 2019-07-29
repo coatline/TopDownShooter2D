@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6605591764564820942}
-  - component: {fileID: 6497240998521004635}
+  - component: {fileID: 3445325595540499336}
   m_Layer: 0
   m_Name: Trigger
-  m_TagString: Bot
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 9118597216416987339}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &6497240998521004635
+--- !u!61 &3445325595540499336
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -55,7 +55,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 23.75, y: 13.25}
+  m_Size: {x: 35.5, y: 20}
   m_EdgeRadius: 0
 --- !u!1 &8380532567373582446
 GameObject:

@@ -10,6 +10,7 @@ TagManager:
   - Crate
   - Bot
   - Land
+  - DeathCircle
   layers:
   - Default
   - TransparentFX
