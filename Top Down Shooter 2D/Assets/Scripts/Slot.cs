@@ -25,7 +25,8 @@ public class Slot : MonoBehaviour
 
         itemHolder.GetComponent<SpriteRenderer>().sprite = item.groundSprite;
         itemHolder.GetComponent<CircleCollider2D>().enabled = true;
-        itemHolder.transform.position = tra.position;
+        itemHolder.GetComponent<Item>().onGround = true;
+        itemHolder.transform.position = tra.position + new Vector3(Random.Range(-.5f,.5f), Random.Range(-.5f, .5f));
         itemHolder.SetActive(true);
         itemHolder = null;
         item = null;
@@ -82,6 +83,8 @@ public class Slot : MonoBehaviour
         {
             itemHolder.transform.Find("Outline").gameObject.SetActive(false);
         }
+
+        itemHolder.GetComponent<Item>().onGround = false;
     }
 
     void SetColorToRarity(Image image, Item item)

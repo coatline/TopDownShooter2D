@@ -11,6 +11,7 @@ TagManager:
   - Bot
   - Land
   - DeathCircle
+  - Eyes
   layers:
   - Default
   - TransparentFX

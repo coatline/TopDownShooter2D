@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] TMP_Text bottomText = null;
     [SerializeField] Image fallBarPrefab = null;
     [SerializeField] SlotManager sm = null;
+    [SerializeField] Image healthUi;
     public Slot selectedSlot = null;
     SpriteRenderer sr = null;
     Image fallBarFill = null;
@@ -23,6 +24,7 @@ public class Player : MonoBehaviour
     public bool jumped;
     bool hasGun;
 
+    public int shield = 100;
     public int health = 100;
     public int kills;
 
@@ -33,7 +35,7 @@ public class Player : MonoBehaviour
     public float speed = 0;
 
     void Awake()
-    {
+    { 
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
 
@@ -83,6 +85,7 @@ public class Player : MonoBehaviour
         {
             if (selectedSlot.item != null)
             {
+                selectedSlot.item.onGround = true;
                 selectedSlot.DropItem(transform);
             }
         }
@@ -117,6 +120,47 @@ public class Player : MonoBehaviour
         sm.SlotDisabledGroundItemFollow(transform.Find("HoldingPlace").transform);
     }
 
+    public void TakeDmg(int damage)
+    {
+        if (shield > 0)
+        {
+            if (damage > shield)
+            {
+                damage -= shield;
+                shield = 0;
+                health -= damage;
+            }
+            else
+            {
+                shield -= damage;
+            }
+        }
+        else
+        {
+            health -= damage;
+        }
+
+        UpdateHealthUI();
+
+        if (health <= 0)
+        {
+            print("Dead");
+        }
+    }
+
+    void UpdateHealthUI()
+    {
+        float healthFill = (health / 100f);
+        var healthBarFill = healthUi.transform.Find("HealthBarFill");
+        healthBarFill.GetComponent<Image>().fillAmount = healthFill;
+        healthBarFill.Find("HealthTxt").GetComponent<TMP_Text>().text = $"{health}/100";
+
+        float shieldFill = (shield / 100f);
+        var shieldBarFill = healthUi.transform.Find("ShieldBarFill");
+        shieldBarFill.GetComponent<Image>().fillAmount = shieldFill;
+        shieldBarFill.Find("ShieldTxt").GetComponent<TMP_Text>().text = $"{shield}/100";
+    }
+
     void LookAtMouse()
     {
         Vector3 dir = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
@@ -143,7 +187,7 @@ public class Player : MonoBehaviour
 
     public void Jump()
     {
-        var yah = Instantiate(fallBarPrefab, transform.position, Quaternion.Euler(0,0,90), worldSpaceCanvas.transform);
+        var yah = Instantiate(fallBarPrefab, transform.position, Quaternion.Euler(0, 0, 90), worldSpaceCanvas.transform);
         fallBarFill = yah.transform.Find("Fill").GetComponent<Image>();
         bottomText.gameObject.SetActive(false);
         sr.sprite = parachuteSprite;
@@ -159,6 +203,7 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E) && landed)
             {
                 collision.gameObject.SetActive(false);
+                collision.gameObject.GetComponent<Item>().onGround = false;
 
                 if (!sm.OpenSlot())
                 {
@@ -166,6 +211,8 @@ public class Player : MonoBehaviour
                 }
 
                 sm.OpenSlot().ChangeItem(collision.gameObject, selectedSlot);
+
+                TakeDmg(5);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha1))
             {
@@ -225,7 +272,7 @@ public class Player : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("DeathCircle"))
         {
-            print("OWOWOWOWOWOW");
+            TakeDmg(1);
         }
     }
 }

@@ -23,9 +23,9 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Bullet")) { return; }
+        if (collision.gameObject.CompareTag("Bullet") || collision.gameObject.CompareTag("Pickupable") || collision.gameObject.CompareTag("Eyes") || collision.gameObject.CompareTag("DeathCircle")) { return; }
 
         else
         {
@@ -38,7 +38,7 @@ public class Bullet : MonoBehaviour
                     player.kills++;
                 }
 
-                collision.gameObject.GetComponent<Player>().health -= dmg;
+                collision.gameObject.GetComponent<Player>().TakeDmg(dmg);
             }
 
             DoDie();

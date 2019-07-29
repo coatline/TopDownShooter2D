@@ -22,7 +22,7 @@ public class Bot : MonoBehaviour
     float parachuteMoveSpeed = 9;
     float freeFallSpeed = .25f;
     public float groundWalkSpeed = 0;
-    List<GameObject> seenCrates;
+    List<GameObject> seenItems;
     public bool landed = false;
     State state = new State();
     Image fallBarFill = null;
@@ -36,10 +36,11 @@ public class Bot : MonoBehaviour
     GameObject land;
     List<GameObject> attackers;
     DeathCircle dc;
+    Rigidbody2D rb;
 
     void Start()
     {
-        seenCrates = new List<GameObject>();
+        seenItems = new List<GameObject>();
         attackers = new List<GameObject>();
         items = new List<Item>();
 
@@ -51,6 +52,7 @@ public class Bot : MonoBehaviour
         dc = FindObjectOfType<DeathCircle>();
 
         sr = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
 
         Invoke("Jump", Random.Range(0f, 20f));
 
@@ -72,13 +74,22 @@ public class Bot : MonoBehaviour
 
     void Update()
     {
+        rb.angularVelocity = 0;
+        rb.velocity = Vector2.zero;
         trigger.gameObject.transform.rotation = Quaternion.identity;
 
-        for (int i = 0; i < seenCrates.Count; i++)
+        for (int i = 0; i < seenItems.Count; i++)
         {
-            if (!seenCrates[i])
+            if (!seenItems[i])
             {
-                seenCrates.RemoveAt(i);
+                seenItems.RemoveAt(i);
+            }
+            else if (seenItems[i].CompareTag("Pickupable"))
+            {
+                if (seenItems[i].GetComponent<Item>().onGround == false)
+                {
+                    seenItems.RemoveAt(i);
+                }
             }
         }
 
@@ -108,7 +119,7 @@ public class Bot : MonoBehaviour
     {
         if (state == State.searching)
         {
-            if (seenCrates.Count == 0)
+            if (seenItems.Count == 0)
             {
                 transform.Translate(.1f, 0, 0);
 
@@ -139,7 +150,7 @@ public class Bot : MonoBehaviour
             }
             else
             {
-                if (seenCrates.Count > 0)
+                if (seenItems.Count > 0)
                 {
                     ChooseTarget();
                 }
@@ -155,7 +166,7 @@ public class Bot : MonoBehaviour
 
             if (Vector2.Distance(transform.position, land.transform.position) <= 100)
             {
-                if (seenCrates.Count > 0)
+                if (seenItems.Count > 0)
                 {
                     state = State.getting;
                 }
@@ -232,11 +243,11 @@ public class Bot : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Crate") && landed)
         {
-            for (int i = 0; i < seenCrates.Count; i++)
+            for (int i = 0; i < seenItems.Count; i++)
             {
-                if (seenCrates[i] == collision.gameObject)
+                if (seenItems[i] == collision.gameObject)
                 {
-                    seenCrates.RemoveAt(i);
+                    seenItems.RemoveAt(i);
                     break;
                 }
             }
@@ -247,7 +258,7 @@ public class Bot : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Crate") && state == State.searching)
         {
-            if (seenCrates.Contains(collision.gameObject)) { return; }
+            if (seenItems.Contains(collision.gameObject)) { return; }
 
             AddToSeen(collision.gameObject);
 
@@ -258,12 +269,15 @@ public class Bot : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Pickupable"))
         {
-            AddToSeen(collision.gameObject);
-
-            if (state != State.attacking && state != State.fleeingFromStorm)
+            if (collision.gameObject.GetComponent<Item>().onGround == true)
             {
-                state = State.getting;
+                AddToSeen(collision.gameObject);
+                if (state != State.attacking && state != State.fleeingFromStorm)
+                {
+                    state = State.getting;
+                }
             }
+
         }
         else if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Bot") && landed)
         {
@@ -277,7 +291,7 @@ public class Bot : MonoBehaviour
                 {
                     if (collision.gameObject.CompareTag("Player"))
                     {
-                        if (collision.gameObject.GetComponent<Player>().selectedSlot.item)
+                        if (collision.gameObject.GetComponentInParent<Player>().selectedSlot.item != null)
                         {
                             state = State.fleeing;
                         }
@@ -325,22 +339,22 @@ public class Bot : MonoBehaviour
 
     void AddToSeen(GameObject obj)
     {
-        seenCrates.Add(obj);
+        seenItems.Add(obj);
     }
 
     void ChooseTarget()
     {
         GameObject closest = null;
 
-        for (int i = 0; i < seenCrates.Count; i++)
+        for (int i = 0; i < seenItems.Count; i++)
         {
             if (!closest)
             {
-                closest = seenCrates[i];
+                closest = seenItems[i];
             }
-            else if (Vector2.Distance(transform.position, seenCrates[i].transform.position) < Vector2.Distance(transform.position, closest.transform.position))
+            else if (Vector2.Distance(transform.position, seenItems[i].transform.position) < Vector2.Distance(transform.position, closest.transform.position))
             {
-                closest = seenCrates[i];
+                closest = seenItems[i];
             }
         }
 
