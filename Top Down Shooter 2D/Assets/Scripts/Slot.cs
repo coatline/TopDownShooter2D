@@ -16,6 +16,18 @@ public class Slot : MonoBehaviour
         holderImage = transform.Find("Holder").GetComponent<Image>();
     }
 
+    public void DestroyItem()
+    {
+        Destroy(itemHolder);
+        Destroy(item);
+        itemHolder = null;
+        item = null;
+
+        holderImage.sprite = null;
+        holderImage.color = new Color(0, 0, 0, 0);
+        backgroundImage.color = new Color(0, 0, 0, 0);
+    }
+
     public void DropItem(Transform tra)
     {
         if (item.itemType == "Gun")

@@ -36,10 +36,10 @@ public class DeathCircle : MonoBehaviour
 
     void Update()
     {
-        if ((Vector2.Distance(transform.localScale, targetScale) > 1f || Vector2.Distance(transform.position, targetPos) > .01f) && canMove)
+        if ((Vector2.Distance(transform.localScale, targetScale) > .5f || Vector2.Distance(transform.position, targetPos) > .01f) && canMove)
         {
             transform.localScale -= targetScale / 500;
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, .2f);
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, .5f);
             //for (int j = 0; j < sides.Length; j++)
             //{
             //    sides[j].transform.position = sidePos[j].position;
@@ -80,7 +80,7 @@ public class DeathCircle : MonoBehaviour
             targetScale = transform.localScale / 2f;
         }
 
-        targetPos += new Vector3(Random.Range(-targetScale.x * 4, targetScale.x * 4), Random.Range(-targetScale.y * 4, targetScale.y * 4));
+        targetPos += new Vector3(Random.Range(-targetScale.x * 3, targetScale.x * 3), Random.Range(-targetScale.y * 3, targetScale.y * 3));
         deathCircleInLine.transform.position = targetPos;
         deathCircleInLine.transform.localScale = targetScale;
         canMove = false;

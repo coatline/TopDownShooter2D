@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] TMP_Text bottomText = null;
     [SerializeField] Image fallBarPrefab = null;
     [SerializeField] SlotManager sm = null;
+    [SerializeField] GameObject mapUI;
     [SerializeField] Image healthUi;
     public Slot selectedSlot = null;
     SpriteRenderer sr = null;
@@ -46,6 +47,15 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKey(KeyCode.Tab))
+        {
+            mapUI.SetActive(true);
+        }
+        else
+        {
+            mapUI.SetActive(false);
+        }
+
         if (Input.GetKeyDown(KeyCode.N))
         {
             Scene scene = SceneManager.GetActiveScene();
@@ -79,6 +89,11 @@ public class Player : MonoBehaviour
                         selectedSlot.item.GetComponent<AR>().player = this;
                         selectedSlot.item.GetComponent<AR>().CalculateShotTime();
                     }
+                }
+                else if(selectedSlot.item.itemType == "Healing")
+                {
+                    Heal(selectedSlot.item.GetComponent<Healing>().amount, selectedSlot.item.GetComponent<Healing>().isShield);
+                    selectedSlot.DestroyItem();
                 }
             }
         }
@@ -123,7 +138,7 @@ public class Player : MonoBehaviour
 
     void Heal(int amount, bool isShield)
     {
-        if (isShield)
+        if (isShield && shield < 100)
         {
             shield += amount;
             if(shield > 100)
@@ -131,7 +146,7 @@ public class Player : MonoBehaviour
                 shield = 100;
             }
         }
-        else
+        else if(health < 100)
         {
             health += amount;
             if (health > 100)
