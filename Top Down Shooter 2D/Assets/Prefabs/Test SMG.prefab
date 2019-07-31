@@ -56,6 +56,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -68,7 +69,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -2
-  m_Sprite: {fileID: -7717128300933111095, guid: 918068b0049524b4681bcfc7b5baea89,
+  m_Sprite: {fileID: 4739694132180214966, guid: 918068b0049524b4681bcfc7b5baea89,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -121,12 +122,12 @@ GameObject:
   - component: {fileID: 4723590185943544615}
   - component: {fileID: 4723590185943544612}
   - component: {fileID: 4723590185943544613}
-  - component: {fileID: 4723590185943544610}
   - component: {fileID: 4723590185943544614}
+  - component: {fileID: 8640861101138718457}
   - component: {fileID: 4723590185943544633}
   - component: {fileID: 8053090054874041596}
   m_Layer: 8
-  m_Name: Test Gun
+  m_Name: Test SMG
   m_TagString: Pickupable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -160,12 +161,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c810c1a268d3a248917e5c1e2a771f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundSprite: {fileID: -7820513185573022212, guid: 918068b0049524b4681bcfc7b5baea89,
+  groundSprite: {fileID: 5571572480089642066, guid: 918068b0049524b4681bcfc7b5baea89,
     type: 3}
-  inHandSprite: {fileID: 2834093059825265682, guid: 918068b0049524b4681bcfc7b5baea89,
+  inHandSprite: {fileID: -1325375620925863998, guid: 918068b0049524b4681bcfc7b5baea89,
     type: 3}
   itemType: Gun
-  itemName: TestGun
+  itemName: TestSMG
   rarity: 
 --- !u!114 &4723590185943544613
 MonoBehaviour:
@@ -179,28 +180,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c63f05415e2131247a63ba5a7ad77ff3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletLifeTime: 1
+  bulletLifeTime: 0.5
   damagePerBullet: 4
   bulletSpeed: 1750
-  gunType: AR
+  gunType: SMG
   aimError: 0
---- !u!114 &4723590185943544610
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4723590185943544611}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6365abe6bd55bd4d8cb2603353b5422, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 5487972224858617172, guid: 7e65528465746104da6748dc05a620af,
-    type: 3}
-  burstDelay: 0
-  shotRate: 0.11
-  player: {fileID: 0}
 --- !u!212 &4723590185943544614
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -226,6 +210,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -238,7 +223,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -2
-  m_Sprite: {fileID: -7820513185573022212, guid: 918068b0049524b4681bcfc7b5baea89,
+  m_Sprite: {fileID: 5571572480089642066, guid: 918068b0049524b4681bcfc7b5baea89,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -250,6 +235,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8640861101138718457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4723590185943544611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77d102075c4e1c408ea4977cb05c2c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 5487972224858617172, guid: 7e65528465746104da6748dc05a620af,
+    type: 3}
+  burstDelay: 0
+  shotRate: 0.075
+  player: {fileID: 0}
 --- !u!58 &4723590185943544633
 CircleCollider2D:
   m_ObjectHideFlags: 0

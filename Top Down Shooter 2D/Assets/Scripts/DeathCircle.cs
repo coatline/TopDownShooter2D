@@ -40,20 +40,6 @@ public class DeathCircle : MonoBehaviour
         {
             transform.localScale -= targetScale / 500;
             transform.position = Vector3.MoveTowards(transform.position, targetPos, .5f);
-            //for (int j = 0; j < sides.Length; j++)
-            //{
-            //    sides[j].transform.position = sidePos[j].position;
-
-            //    switch (sides[j].name)
-            //    {
-            //        case "right": sides[j].transform.localScale -= new Vector3(0, .01125f); break;
-            //        case "left": sides[j].transform.localScale -= new Vector3(0, .01125f); break;
-            //        case "up": sides[j].transform.localScale -= new Vector3(.01125f, 0); break;
-            //        case "down": sides[j].transform.localScale -= new Vector3(.01125f, 0); break;
-
-            //    }
-
-            //}
         }
         else if (canStartNewPhase)
         {
@@ -73,7 +59,7 @@ public class DeathCircle : MonoBehaviour
     {
         if (targetScale == transform.localScale)
         {
-            targetScale = transform.localScale / 3.5f;
+            targetScale = transform.localScale / 3f;
         }
         else
         {

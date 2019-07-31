@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6605591764564820942}
   - component: {fileID: 3445325595540499336}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Trigger
   m_TagString: Eyes
   m_Icon: {fileID: 0}
@@ -66,7 +66,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8551260564923417867}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HoldingPlace
   m_TagString: Bot
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 9118597216416987336}
   - component: {fileID: 9118597216416987337}
   - component: {fileID: -2972601369896667824}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bot
   m_TagString: Bot
   m_Icon: {fileID: 0}
@@ -171,6 +171,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -224,7 +225,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9118597216664607863}
   - component: {fileID: 9118597216664607861}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arm
   m_TagString: Bot
   m_Icon: {fileID: 0}
@@ -270,6 +271,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -304,7 +306,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9118597217180775777}
   - component: {fileID: 9118597217180775791}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arm
   m_TagString: Bot
   m_Icon: {fileID: 0}
@@ -350,6 +352,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -385,7 +388,7 @@ GameObject:
   - component: {fileID: 9118597218047140340}
   - component: {fileID: 9118597218047140338}
   - component: {fileID: 9118597218047140341}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Head
   m_TagString: Bot
   m_Icon: {fileID: 0}
@@ -431,6 +434,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0

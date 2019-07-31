@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     SpriteRenderer sr = null;
     Image fallBarFill = null;
     Rigidbody2D rb = null;
+    GameObject inline;
+    DeathCircle dc;
 
     Vector3 movement;
 
@@ -34,11 +36,16 @@ public class Player : MonoBehaviour
     [SerializeField] float parachuteMoveSpeed = 7;
     public float groundWalkSpeed = 0;
     public float speed = 0;
+    float gasTimer;
 
     void Awake()
-    { 
+    {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+
+        dc = FindObjectOfType<DeathCircle>();
+
+        inline = dc.transform.Find("DeathCircleInLine").gameObject;
 
         EnableOrDisableChildren(false);
 
@@ -78,26 +85,6 @@ public class Player : MonoBehaviour
 
         LookAtMouse();
 
-        if (Input.GetMouseButton(0))
-        {
-            if (selectedSlot.item)
-            {
-                if (selectedSlot.item.itemType == "Gun")
-                {
-                    if (selectedSlot.item.GetComponent<Gun>().gunType == "AR")
-                    {
-                        selectedSlot.item.GetComponent<AR>().player = this;
-                        selectedSlot.item.GetComponent<AR>().CalculateShotTime();
-                    }
-                }
-                else if(selectedSlot.item.itemType == "Healing")
-                {
-                    Heal(selectedSlot.item.GetComponent<Healing>().amount, selectedSlot.item.GetComponent<Healing>().isShield);
-                    selectedSlot.DestroyItem();
-                }
-            }
-        }
-
         if (Input.GetKeyDown(KeyCode.Q))
         {
             if (selectedSlot.item != null)
@@ -133,7 +120,38 @@ public class Player : MonoBehaviour
 
         if (!landed) return;
 
+        //if (transform.position < ((inline.transform.localScale / 2) + inline.transform.position))
+
         sm.SlotDisabledGroundItemFollow(transform.Find("HoldingPlace").transform);
+
+        if (Input.GetMouseButton(0))
+        {
+            if (selectedSlot.item)
+            {
+                if (selectedSlot.item.itemType == "Gun")
+                {
+                    if (selectedSlot.item.GetComponent<Gun>().gunType == "AR")
+                    {
+                        selectedSlot.item.GetComponent<AR>().player = this;
+                        selectedSlot.item.GetComponent<AR>().CalculateShotTime();
+                    }
+                    else if (selectedSlot.item.GetComponent<Gun>().gunType == "SMG")
+                    {
+                        selectedSlot.item.GetComponent<SMG>().player = this;
+                        selectedSlot.item.GetComponent<SMG>().CalculateShotTime();
+                    }
+                }
+                else if (selectedSlot.item.itemType == "Healing")
+                {
+                    var script = selectedSlot.item.GetComponent<Healing>();
+
+                    if ((script.isShield && shield >= 100) || (!script.isShield && health >= 100)) { return; }
+
+                    Heal(selectedSlot.item.GetComponent<Healing>().amount, selectedSlot.item.GetComponent<Healing>().isShield);
+                    selectedSlot.DestroyItem();
+                }
+            }
+        }
     }
 
     void Heal(int amount, bool isShield)
@@ -141,12 +159,12 @@ public class Player : MonoBehaviour
         if (isShield && shield < 100)
         {
             shield += amount;
-            if(shield > 100)
+            if (shield > 100)
             {
                 shield = 100;
             }
         }
-        else if(health < 100)
+        else if (health < 100)
         {
             health += amount;
             if (health > 100)
@@ -210,6 +228,7 @@ public class Player : MonoBehaviour
     {
         for (int i = 0; i < transform.childCount; i++)
         {
+            if (transform.GetChild(i).name == "PlayerBeacon") { continue; }
             transform.GetChild(i).gameObject.SetActive(trueorfalse);
         }
     }
@@ -308,7 +327,15 @@ public class Player : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("DeathCircle"))
         {
-            TakeDmg(1);
+            if (gasTimer >= 1)
+            {
+                TakeDmg(5);
+                gasTimer = 0;
+            }
+            else
+            {
+                gasTimer += Time.deltaTime;
+            }
         }
     }
 }

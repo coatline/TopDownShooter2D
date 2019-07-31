@@ -56,6 +56,15 @@ TextureImporter:
   - first:
       213: -1149981725733453089
     second: BigShieldSprite
+  - first:
+      213: 5571572480089642066
+    second: TestSMGGround
+  - first:
+      213: 4739694132180214966
+    second: TestSMGOutline
+  - first:
+      213: -1325375620925863998
+    second: TestSMGInHand
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -517,7 +526,7 @@ TextureImporter:
         width: 9
         height: 11
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -525,6 +534,69 @@ TextureImporter:
       bones: []
       spriteID: d66e50e06d96dae4ab0cf137c5368bfb
       internalID: -1149981725733453089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TestSMGGround
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 184
+        width: 21
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 331f002d19e00e14ab604b20743687dc
+      internalID: 5571572480089642066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TestSMGOutline
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 170
+        width: 23
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b770d5548abd4c148a202d1d25ca0baf
+      internalID: 4739694132180214966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TestSMGInHand
+      rect:
+        serializedVersion: 2
+        x: 123
+        y: 179
+        width: 5
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60ea67fec0f0cdc48aee85cf6c19efe7
+      internalID: -1325375620925863998
       vertices: []
       indices: 
       edges: []

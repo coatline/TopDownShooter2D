@@ -24,9 +24,9 @@ TagManager:
   - Item
   - Bullet
   - Player
-  - 
-  - 
-  - 
+  - Crate
+  - GasPredictionCircle
+  - PlayerBeacon
   - 
   - 
   - 
