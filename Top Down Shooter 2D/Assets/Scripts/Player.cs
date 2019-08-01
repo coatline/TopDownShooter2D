@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     public Slot selectedSlot = null;
     SpriteRenderer sr = null;
     Image fallBarFill = null;
+    GameObject holdingPlace;
     Rigidbody2D rb = null;
     GameObject inline;
     DeathCircle dc;
@@ -45,7 +46,9 @@ public class Player : MonoBehaviour
 
         dc = FindObjectOfType<DeathCircle>();
 
-        inline = dc.transform.Find("DeathCircleInLine").gameObject;
+        inline = dc.transform.parent.Find("DeathCircleInLine").gameObject;
+
+        holdingPlace = transform.Find("HoldingPlace").gameObject;
 
         EnableOrDisableChildren(false);
 
@@ -121,8 +124,6 @@ public class Player : MonoBehaviour
         if (!landed) return;
 
         //if (transform.position < ((inline.transform.localScale / 2) + inline.transform.position))
-
-        sm.SlotDisabledGroundItemFollow(transform.Find("HoldingPlace").transform);
 
         if (Input.GetMouseButton(0))
         {
@@ -263,7 +264,7 @@ public class Player : MonoBehaviour
 
                 if (!sm.OpenSlot())
                 {
-                    selectedSlot.DropItem(transform);
+                    //selectedSlot.DropItem(transform);
                 }
 
                 sm.OpenSlot().ChangeItem(collision.gameObject, selectedSlot);

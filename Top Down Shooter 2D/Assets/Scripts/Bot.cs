@@ -119,7 +119,7 @@ public class Bot : MonoBehaviour
         {
             if (seenItems.Count == 0)
             {
-                transform.Translate(.1f, 0, 0);
+                transform.Translate(.1f, 0, 0, Space.Self);
 
                 if (!startedCoroutine)
                 {
@@ -143,6 +143,10 @@ public class Bot : MonoBehaviour
                 //transform.rotation = Quaternion.Euler(0, 0, angle + 90);
 
                 //transform.Translate(.1f, 0,0,Space.Self);
+                Vector3 dir = (transform.position - target.transform.position);
+                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                transform.rotation = Quaternion.Euler(0, 0, angle + 90);
+
                 var toTarget = (target.transform.position - transform.position).normalized;
                 transform.Translate(toTarget * speed * Time.deltaTime, Space.World);
             }

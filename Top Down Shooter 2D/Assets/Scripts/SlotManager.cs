@@ -17,18 +17,6 @@ public class SlotManager : MonoBehaviour
         selectedSlot.Select();
     }
 
-    public void SlotDisabledGroundItemFollow(Transform tran)
-    {
-        for (int i = 0; i < slots.Count; i++)
-        {
-            if (slots[i].itemHolder)
-            {
-                slots[i].itemHolder.transform.position = tran.position;
-                slots[i].itemHolder.transform.rotation = tran.rotation;
-            }
-        }
-    }
-
     private void Update()
     {
         var scrollInput = Input.GetAxis("Mouse ScrollWheel");

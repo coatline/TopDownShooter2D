@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Slot : MonoBehaviour
 {
-    public GameObject itemHolder;
+    GameObject playerHoldingPlace;
     Image backgroundImage;
     Image holderImage;
     public Item item;
@@ -14,13 +14,12 @@ public class Slot : MonoBehaviour
     {
         backgroundImage = transform.Find("Background Sprite").GetComponent<Image>();
         holderImage = transform.Find("Holder").GetComponent<Image>();
+        playerHoldingPlace = FindObjectOfType<Player>().transform.Find("HoldingPlace").gameObject;
     }
 
     public void DestroyItem()
     {
-        Destroy(itemHolder);
         Destroy(item);
-        itemHolder = null;
         item = null;
 
         holderImage.sprite = null;
@@ -30,73 +29,96 @@ public class Slot : MonoBehaviour
 
     public void DropItem(Transform tra)
     {
-        if (item.itemType == "Gun")
-        {
-            itemHolder.transform.Find("Outline").gameObject.SetActive(true);
-        }
+        CreateItem(tra);
 
-        itemHolder.tag = "Pickupable";
-        itemHolder.GetComponent<SpriteRenderer>().sprite = item.groundSprite;
-        itemHolder.GetComponent<CircleCollider2D>().enabled = true;
-        itemHolder.transform.position = tra.position + new Vector3(Random.Range(-.5f,.5f), Random.Range(-.5f, .5f));
-        itemHolder.SetActive(true);
-        itemHolder = null;
         item = null;
+        print("SDf");
+
+        //itemHolder.tag = "Pickupable";
+        //itemHolder.GetComponent<SpriteRenderer>().sprite = item.groundSprite;
+        //itemHolder.GetComponent<CircleCollider2D>().enabled = true;
+        //itemHolder.transform.position = tra.position + new Vector3(Random.Range(-.5f,.5f), Random.Range(-.5f, .5f));
+        //itemHolder.SetActive(true);
+        //itemHolder = null;
+        //item = null;
 
         holderImage.sprite = null;
         holderImage.color = new Color(0, 0, 0, 0);
         backgroundImage.color = new Color(0, 0, 0, 0);
+    }
 
+    void CreateItem(Transform tra)
+    {
+        var newItem = new GameObject();
+
+        newItem.tag = "Pickupable";
+
+        if (this.item.itemType == "Gun")
+        {
+            //itemHolder.transform.Find("Outline").gameObject.SetActive(true);
+
+            var itemGunScript = this.item.GetComponent<Gun>();
+
+            newItem.AddComponent<Gun>();
+            newItem.GetComponent<Gun>().SetAllVariables(itemGunScript.bulletLifeTime, itemGunScript.damagePerBullet, itemGunScript.bulletSpeed, itemGunScript.gunType, itemGunScript.aimError);
+        }
+
+        newItem.AddComponent<SpriteRenderer>();
+        newItem.GetComponent<SpriteRenderer>().sprite = item.groundSprite;
+
+        newItem.AddComponent<CircleCollider2D>();
+        newItem.GetComponent<CircleCollider2D>().isTrigger = true;
+
+        item.transform.position = tra.position + new Vector3(Random.Range(-.5f, .5f), Random.Range(-.5f, .5f));
     }
 
     public void DeSelect()
     {
+        playerHoldingPlace.GetComponent<SpriteRenderer>().sprite = null;
+
         var imageScript = GetComponent<Image>();
         imageScript.color = new Color(imageScript.color.r, imageScript.color.g, imageScript.color.b, .5f);
-
-        if (item && itemHolder)
-        {
-            itemHolder.gameObject.SetActive(false);
-        }
     }
 
     public void Select()
     {
+        ShowItemInHand();
 
         var imageScript = GetComponent<Image>();
         imageScript.color = new Color(imageScript.color.r, imageScript.color.g, imageScript.color.b, 1f);
-
-        if (item && itemHolder)
-        {
-            itemHolder.gameObject.SetActive(true);
-            itemHolder.GetComponent<SpriteRenderer>().sprite = itemHolder.GetComponent<Item>().inHandSprite;
-        }
     }
 
     public void ChangeItem(GameObject groundedItem, Slot selectedSlot)
     {
-        itemHolder = groundedItem;
         item = groundedItem.GetComponent<Item>();
+
+        Destroy(groundedItem);
+
         holderImage.sprite = item.groundSprite;
         holderImage.color = Color.white;
-        itemHolder.tag = "Untagged";
 
         //if already selected slot enable inhand sprite for gun
         if (selectedSlot == this)
         {
-            itemHolder.gameObject.SetActive(true);
-            itemHolder.GetComponent<SpriteRenderer>().sprite = itemHolder.GetComponent<Item>().inHandSprite;
+            ShowItemInHand();
         }
-
-        itemHolder.GetComponent<CircleCollider2D>().enabled = false;
 
         SetColorToRarity(backgroundImage, item);
+    }
 
-        if (item.itemType == "Gun")
+    void ShowItemInHand()
+    {
+        if (!item)
         {
-            itemHolder.transform.Find("Outline").gameObject.SetActive(false);
+            if (playerHoldingPlace)
+            {
+                playerHoldingPlace.GetComponent<SpriteRenderer>().sprite = null;
+            }
+
+            return;
         }
 
+        playerHoldingPlace.GetComponent<SpriteRenderer>().sprite = item.inHandSprite;
     }
 
     void SetColorToRarity(Image image, Item item)

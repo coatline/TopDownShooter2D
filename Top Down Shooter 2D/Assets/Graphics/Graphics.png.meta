@@ -19,7 +19,7 @@ TextureImporter:
     second: Parachute
   - first:
       213: 8109156625128792913
-    second: Inside Bar
+    second: FallBarInLine
   - first:
       213: 5997688581893539255
     second: Outer Bar
@@ -65,6 +65,15 @@ TextureImporter:
   - first:
       213: -1325375620925863998
     second: TestSMGInHand
+  - first:
+      213: -8662075319188904508
+    second: Graphics_0
+  - first:
+      213: -4065532280177297973
+    second: Mini Potion
+  - first:
+      213: 2898370165963198593
+    second: FallBarOutline
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -266,7 +275,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Inside Bar
+      name: FallBarInLine
       rect:
         serializedVersion: 2
         x: 22
@@ -282,27 +291,6 @@ TextureImporter:
       bones: []
       spriteID: 9fca6ce6b1f5eb545b3f6823a5ac57f7
       internalID: 8109156625128792913
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Outer Bar
-      rect:
-        serializedVersion: 2
-        x: 21
-        y: 171
-        width: 14
-        height: 3
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fe58ca7416d7cd941899f2aa71f036da
-      internalID: 5997688581893539255
       vertices: []
       indices: 
       edges: []
@@ -479,9 +467,9 @@ TextureImporter:
       name: HealthBarFill
       rect:
         serializedVersion: 2
-        x: 34
+        x: 33
         y: 158
-        width: 24
+        width: 25
         height: 2
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -501,9 +489,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 5
-        y: 121
+        y: 123
         width: 7
-        height: 11
+        height: 9
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -522,9 +510,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 14
-        y: 121
-        width: 9
-        height: 11
+        y: 123
+        width: 7
+        height: 9
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -547,7 +535,7 @@ TextureImporter:
         width: 21
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -568,7 +556,7 @@ TextureImporter:
         width: 23
         height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -589,7 +577,7 @@ TextureImporter:
         width: 5
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -597,6 +585,69 @@ TextureImporter:
       bones: []
       spriteID: 60ea67fec0f0cdc48aee85cf6c19efe7
       internalID: -1325375620925863998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Graphics_0
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 121
+        width: 1
+        height: 1
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 769ed1608509f7b4f85bcc5c1db95177
+      internalID: -8662075319188904508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mini Potion
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 123
+        width: 4
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0805f2a5e2b8f4c42ade45c7184a263b
+      internalID: -4065532280177297973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FallBarOutline
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 171
+        width: 14
+        height: 3
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91315d945529d414a97e2f682c3aba93
+      internalID: 2898370165963198593
       vertices: []
       indices: 
       edges: []

@@ -11,6 +11,15 @@ public class Gun : MonoBehaviour
     public float aimError;
     //public float ammo;
 
+    public void SetAllVariables(float bulletLife, int dmgperbullet, float bulletSpeed, string gunType, float aimErr)
+    {
+        bulletLife = bulletLifeTime;
+        dmgperbullet = damagePerBullet;
+        this.bulletSpeed = bulletSpeed;
+        this.gunType = gunType;
+        aimError = aimErr; 
+    }
+
     private void Start()
     {
         var outsr = transform.Find("Outline").GetComponent<SpriteRenderer>();
@@ -32,7 +41,7 @@ public class Gun : MonoBehaviour
             damagePerBullet += 3;
             outsr.color = Color.cyan;
         }
-        else if(gunrarity == "Epic")
+        else if (gunrarity == "Epic")
         {
             damagePerBullet += 5;
             outsr.color = new Color(.9f, .1f, .9f);
