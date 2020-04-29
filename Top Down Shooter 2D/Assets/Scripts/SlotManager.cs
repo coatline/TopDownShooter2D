@@ -19,6 +19,8 @@ public class SlotManager : MonoBehaviour
 
     private void Update()
     {
+        if (!player) { return; }
+
         var scrollInput = Input.GetAxis("Mouse ScrollWheel");
 
         if (scrollInput > 0)
@@ -35,7 +37,7 @@ public class SlotManager : MonoBehaviour
     {
         for (int i = 0; i < slots.Count; i++)
         {
-            if (slots[i].item)
+            if (slots[i].currentItemScript)
             {
                 continue;
             }
@@ -45,7 +47,7 @@ public class SlotManager : MonoBehaviour
             }
         }
 
-        return null;
+        return selectedSlot;
     }
 
     void ChangeSelected(int amount)

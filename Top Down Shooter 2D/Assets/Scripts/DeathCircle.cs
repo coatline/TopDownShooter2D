@@ -4,78 +4,161 @@ using UnityEngine;
 
 public class DeathCircle : MonoBehaviour
 {
-    [SerializeField] GameObject deathCircleInLine;
-    [SerializeField] GameObject[] sides;
-    public Vector3 targetScale;
-    Vector3 beforeScale;
-    public bool isMoving;
-    List<Transform> sidePos;
-    Vector3 targetPos;
-    bool canStartNewPhase;
-    bool canMove;
+    public static DeathCircle instance;
 
-    void Start()
+    [SerializeField] Transform targetCircleTransform;
+    Transform circleTransform;
+    Transform topTransform;
+    Transform bottomTransform;
+    Transform leftTransform;
+    Transform rightTransform;
+
+    [SerializeField] float maxMovement;
+    [SerializeField] float minMovement;
+    [SerializeField] float shrinkTimer;
+    float circleShrinkSpeed;
+    float circleMoveSpeed;
+
+    bool isMoving;
+
+    [SerializeField] int damagePerSecond;
+
+    [SerializeField] Vector3 initalCircleSize;
+    [SerializeField] Vector3 initalCirclePosition;
+
+    Vector3 circleSize;
+    Vector3 circlePosition;
+
+    Vector3 targetCircleSize;
+    Vector3 targetCirclePosition;
+
+    private void Awake()
     {
-        //sidePos = new List<Transform>();
+        instance = this;
 
-        //for (int i = 0; i < 4; i++)
-        //{
-        //    sidePos.Add(transform.GetChild(i).transform);
-        //}
+        circleShrinkSpeed = 25;
+        circleMoveSpeed = 10;
 
-        //for (int j = 0; j < sides.Length; j++)
-        //{
-        //    sides[j].transform.position = sidePos[j].transform.position;
-        //}
+        circleTransform = transform.Find("circle");
+        topTransform = transform.Find("top");
+        bottomTransform = transform.Find("bottom");
+        leftTransform = transform.Find("left");
+        rightTransform = transform.Find("right");
 
-        targetPos = transform.position;
-        targetScale = transform.localScale;
-
-        Begin();
+        SetCircleSize(initalCirclePosition, initalCircleSize);
+        GenerateTargetCircle();
     }
 
-    void Update()
+    private void Update()
     {
-        if ((Vector2.Distance(transform.localScale, targetScale) > .5f || Vector2.Distance(transform.position, targetPos) > .01f) && canMove)
-        {
-            transform.localScale -= targetScale / 500;
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, .5f);
-        }
-        else if (canStartNewPhase)
-        {
-            Begin();
-        }
-    }
+        shrinkTimer -= Time.deltaTime;
 
-    void Begin()
-    {
-        SetValues();
-        Invoke("NewPhase", Random.Range(3f, 5f));
-        canStartNewPhase = false;
-        isMoving = false;
-    }
-
-    void SetValues()
-    {
-        if (targetScale == transform.localScale)
+        if (shrinkTimer < 0)
         {
-            targetScale = transform.localScale / 3f;
+            isMoving = true;
+
+            Vector3 sizeChangeVector = (targetCircleSize - circleSize).normalized;
+            Vector3 newCircleSize = circleSize + sizeChangeVector * Time.deltaTime * circleShrinkSpeed;
+
+            Vector3 circleMoveDir = (targetCirclePosition - circlePosition).normalized;
+            Vector3 newCirclePosition = circlePosition + circleMoveDir * Time.deltaTime * circleMoveSpeed;
+
+            SetCircleSize(newCirclePosition, newCircleSize);
+
+            float distanceTestAmount = .1f;
+            if (Vector3.Distance(newCircleSize, targetCircleSize) < distanceTestAmount && Vector3.Distance(newCirclePosition, targetCirclePosition) < distanceTestAmount)
+            {
+                print("NEW CIRCLE");
+                GenerateTargetCircle();
+            }
         }
         else
         {
-            targetScale = transform.localScale / 2f;
+            isMoving = false;
         }
 
-        targetPos += new Vector3(Random.Range(-targetScale.x * 3, targetScale.x * 3), Random.Range(-targetScale.y * 3, targetScale.y * 3));
-        deathCircleInLine.transform.position = targetPos;
-        deathCircleInLine.transform.localScale = targetScale;
-        canMove = false;
     }
 
-    void NewPhase()
+    void GenerateTargetCircle()
     {
-        canStartNewPhase = true;
-        canMove = true;
-        isMoving = true;
+        targetCircleTransform.gameObject.SetActive(true);
+
+        float shrinkSizeAmount = Random.Range(targetCircleTransform.localScale.x / 3.5f, targetCircleTransform.localScale.x / 1.75f);
+        Vector3 generatedTargetCircleSize = circleSize - new Vector3(shrinkSizeAmount, shrinkSizeAmount);
+
+        Vector3 movePositionAmount = new Vector2(Random.Range(minMovement, maxMovement), Random.Range(minMovement, maxMovement));
+        Vector3 generatedTargetCirclePosition = circlePosition + movePositionAmount;
+
+        float shrinkTime = Random.Range(10, 30);
+
+        SetTargetCircle(generatedTargetCirclePosition, generatedTargetCircleSize, shrinkTime);
+    }
+
+    void SetCircleSize(Vector3 position, Vector3 size)
+    {
+        circlePosition = position;
+        circleSize = size;
+
+        transform.position = position;
+
+        circleTransform.localScale = size;
+
+        topTransform.localScale = new Vector3(1500, 1000);
+        topTransform.localPosition = new Vector3(0, topTransform.localScale.y / 2 + size.y / 2);
+
+        bottomTransform.localScale = new Vector3(1500, 1000);
+        bottomTransform.localPosition = new Vector3(0, -topTransform.localScale.y / 2 - size.y / 2);
+
+        leftTransform.localScale = new Vector3(1000, circleTransform.localScale.y);
+        leftTransform.localPosition = new Vector3(-leftTransform.localScale.x / 2 - size.y / 2, 0);
+
+        rightTransform.localScale = new Vector3(1000, circleTransform.localScale.y);
+        rightTransform.localPosition = new Vector3(leftTransform.localScale.x / 2 + size.y / 2, 0);
+
+        if (size.x < 1)
+        {
+            this.enabled = false;
+        }
+    }
+
+    void SetTargetCircle(Vector3 position, Vector3 size, float shrinkTimer)
+    {
+        this.shrinkTimer = shrinkTimer;
+
+        targetCircleTransform.position = position;
+        targetCircleTransform.localScale = size;
+
+        targetCircleSize = size;
+        targetCirclePosition = position;
+    }
+
+    bool isInsideSafeZone(Vector3 position)
+    {
+        return Vector3.Distance(position, circlePosition) < (circleSize.x / 2) - 5;
+    }
+
+    bool IsOutsideCircle(Vector3 position)
+    {
+        return Vector3.Distance(position, circlePosition) > circleSize.x / 2;
+    }
+
+
+    public static bool isInsideSafeZone_Static(Vector3 position)
+    {
+        return instance.isInsideSafeZone(position);
+    }
+
+    public static bool IsOutsideCircle_Static(Vector3 position)
+    {
+        return instance.IsOutsideCircle(position);
+    }
+    bool IsMoving()
+    {
+        return isMoving;
+    }
+
+    public static bool IsMoving_Static()
+    {
+        return instance.IsMoving();
     }
 }

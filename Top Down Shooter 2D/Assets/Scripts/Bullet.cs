@@ -4,44 +4,102 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    public GameObject player;
     public float lifeTime;
-    public Player player;
+    public bool botBullet;
+    SpriteRenderer sr;
+    Rigidbody2D rb;
     public int dmg;
-    AudioSource a;
+    bool dying;
 
     private void Start()
     {
-        a = GetComponent<AudioSource>();
-
-        a.Play();
+        sr = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
 
         Invoke("DoDie", lifeTime);
     }
 
+    float alph = 1;
+
     void DoDie()
     {
-        Destroy(gameObject);
+        dying = true;
+
+        rb.velocity = Vector2.zero;
+
+        alph -= Time.deltaTime * 1.25f;
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, alph);
+
+        if (alph <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    bool done;
+
+    private void Update()
+    {
+        if (!done)
+        {
+            done = true;
+        }
+
+        if (dying)
+        {
+            DoDie();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Bullet") || collision.gameObject.CompareTag("Pickupable") || collision.gameObject.CompareTag("Eyes") || collision.gameObject.CompareTag("DeathCircle") || collision.gameObject.CompareTag("Water")) { return; }
+        var collisionGameobjectTag = collision.gameObject.tag;
+
+        if (collisionGameobjectTag == "Bullet" || collisionGameobjectTag == "Pickupable" || collisionGameobjectTag == "Eyes" || collisionGameobjectTag == "DeathCircle" || collisionGameobjectTag == "Water" || dying || !player) { return; }
 
         else
         {
-            if (collision.gameObject.CompareTag("Player"))
+            if (collisionGameobjectTag == "Player")
             {
-                var plHealth = collision.gameObject.GetComponent<Player>().health;
+                var playerScript = collision.gameObject.GetComponentInParent<Player>();
 
-                if (plHealth - dmg <= 0)
+                if (playerScript.health - dmg <= 0)
                 {
-                    player.kills++;
+                    if (botBullet)
+                    {
+                        player.GetComponent<Bot>().KilledEnemy();
+                    }
+                    else
+                    {
+                        player.GetComponent<Player>().KilledEnemy();
+                    }
                 }
 
-                collision.gameObject.GetComponent<Player>().TakeDmg(dmg);
+                playerScript.TakeDmg(dmg);
+                Destroy(gameObject);
+            }
+            else if (collisionGameobjectTag == "Bot")
+            {
+                var botScript = collision.gameObject.GetComponentInParent<Bot>();
+
+                if (botScript.health - dmg <= 0)
+                {
+                    if (botBullet)
+                    {
+                        player.GetComponent<Bot>().KilledEnemy();
+                    }
+                    else
+                    {
+                        player.GetComponent<Player>().KilledEnemy();
+                    }
+                }
+
+                botScript.TakeDmg(dmg);
+                Destroy(gameObject);
             }
 
-            DoDie();
+            dying = true;
         }
     }
 }

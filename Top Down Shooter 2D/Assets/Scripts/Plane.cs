@@ -35,18 +35,26 @@ public class Plane : MonoBehaviour
     {
         if (transform.position == endPos && !done)
         {
+            if (transform.childCount > 0)
+            {
+                transform.DetachChildren();
+            }
+
+            StartCoroutine(DoDie(2f));
+
             var player = FindObjectOfType<Player>();
+
+            if (!player)
+            {
+                return;
+            }
 
             if (!player.GetComponent<Player>().jumped)
             {
                 player.GetComponent<Player>().Jump();
             }
 
-            if (transform.childCount > 0)
-            {
-                transform.DetachChildren();
-            }
-                StartCoroutine(DoDie(0.4f));
+
             //Destroy(gameObject);
         }
 

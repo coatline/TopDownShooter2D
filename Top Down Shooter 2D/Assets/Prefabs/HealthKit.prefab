@@ -51,9 +51,11 @@ MonoBehaviour:
     type: 3}
   inHandSprite: {fileID: -1532871814036151470, guid: 918068b0049524b4681bcfc7b5baea89,
     type: 3}
+  slotSprite: {fileID: 0}
   itemType: Healing
   itemName: TestGun
   rarity: 
+  pickedUp: 0
 --- !u!114 &873689328762702902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82,10 +84,12 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

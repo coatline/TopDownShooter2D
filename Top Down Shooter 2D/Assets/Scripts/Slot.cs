@@ -5,13 +5,20 @@ using UnityEngine;
 
 public class Slot : MonoBehaviour
 {
+    [SerializeField] Color hightlightedColor;
+    [SerializeField] Color normalColor;
     GameObject playerHoldingPlace;
+    public Item currentItemScript;
     Image backgroundImage;
+    Image imageScript;
     Image holderImage;
-    public Item item;
+    bool selected;
+
+    //holderImage is the holder of the image of the gun in the slot
 
     private void Awake()
     {
+        imageScript = GetComponent<Image>();
         backgroundImage = transform.Find("Background Sprite").GetComponent<Image>();
         holderImage = transform.Find("Holder").GetComponent<Image>();
         playerHoldingPlace = FindObjectOfType<Player>().transform.Find("HoldingPlace").gameObject;
@@ -19,8 +26,10 @@ public class Slot : MonoBehaviour
 
     public void DestroyItem()
     {
-        Destroy(item);
-        item = null;
+        Destroy(currentItemScript.gameObject);
+        currentItemScript = null;
+
+        UpdateItemInHand();
 
         holderImage.sprite = null;
         holderImage.color = new Color(0, 0, 0, 0);
@@ -29,10 +38,12 @@ public class Slot : MonoBehaviour
 
     public void DropItem(Transform tra)
     {
-        CreateItem(tra);
+        if (!currentItemScript)
+        {
+            return;
+        }
 
-        item = null;
-        print("SDf");
+        currentItemScript.Drop(tra);
 
         //itemHolder.tag = "Pickupable";
         //itemHolder.GetComponent<SpriteRenderer>().sprite = item.groundSprite;
@@ -42,73 +53,63 @@ public class Slot : MonoBehaviour
         //itemHolder = null;
         //item = null;
 
+        currentItemScript = null;
+
+        UpdateItemInHand();
+
         holderImage.sprite = null;
         holderImage.color = new Color(0, 0, 0, 0);
         backgroundImage.color = new Color(0, 0, 0, 0);
     }
 
-    void CreateItem(Transform tra)
-    {
-        var newItem = new GameObject();
-
-        newItem.tag = "Pickupable";
-
-        if (this.item.itemType == "Gun")
-        {
-            //itemHolder.transform.Find("Outline").gameObject.SetActive(true);
-
-            var itemGunScript = this.item.GetComponent<Gun>();
-
-            newItem.AddComponent<Gun>();
-            newItem.GetComponent<Gun>().SetAllVariables(itemGunScript.bulletLifeTime, itemGunScript.damagePerBullet, itemGunScript.bulletSpeed, itemGunScript.gunType, itemGunScript.aimError);
-        }
-
-        newItem.AddComponent<SpriteRenderer>();
-        newItem.GetComponent<SpriteRenderer>().sprite = item.groundSprite;
-
-        newItem.AddComponent<CircleCollider2D>();
-        newItem.GetComponent<CircleCollider2D>().isTrigger = true;
-
-        item.transform.position = tra.position + new Vector3(Random.Range(-.5f, .5f), Random.Range(-.5f, .5f));
-    }
-
     public void DeSelect()
     {
+        selected = false;
+
         playerHoldingPlace.GetComponent<SpriteRenderer>().sprite = null;
 
-        var imageScript = GetComponent<Image>();
-        imageScript.color = new Color(imageScript.color.r, imageScript.color.g, imageScript.color.b, .5f);
+        imageScript.color = normalColor;
     }
 
     public void Select()
     {
-        ShowItemInHand();
+        selected = true;
 
-        var imageScript = GetComponent<Image>();
-        imageScript.color = new Color(imageScript.color.r, imageScript.color.g, imageScript.color.b, 1f);
+        UpdateItemInHand();
+
+        imageScript.color = hightlightedColor;
     }
 
-    public void ChangeItem(GameObject groundedItem, Slot selectedSlot)
+    public void ChangeItem(Transform playerTransform, Item newItemScript, Slot selectedSlot)
     {
-        item = groundedItem.GetComponent<Item>();
+        //paramater selectedSlot to check if already selected then show the item
 
-        Destroy(groundedItem);
+        //if already has item in slot, drop it
+        if (currentItemScript)
+        {
+            DropItem(playerTransform);
+        }
 
-        holderImage.sprite = item.groundSprite;
+        currentItemScript = newItemScript;
+
+        newItemScript.gameObject.SetActive(false);
+
+        //WOULD CHANGE SPRITE TO SLOTSPRITE BUT DO NOT HAVE A DIFFERENT SPRITE FOR IT AT THE MOMENT
+        holderImage.sprite = newItemScript.groundSprite;
         holderImage.color = Color.white;
 
         //if already selected slot enable inhand sprite for gun
         if (selectedSlot == this)
         {
-            ShowItemInHand();
+            UpdateItemInHand();
         }
 
-        SetColorToRarity(backgroundImage, item);
+        SetColorToRarity(backgroundImage, newItemScript);
     }
 
-    void ShowItemInHand()
+    void UpdateItemInHand()
     {
-        if (!item)
+        if (!currentItemScript)
         {
             if (playerHoldingPlace)
             {
@@ -118,14 +119,14 @@ public class Slot : MonoBehaviour
             return;
         }
 
-        playerHoldingPlace.GetComponent<SpriteRenderer>().sprite = item.inHandSprite;
+        playerHoldingPlace.GetComponent<SpriteRenderer>().sprite = currentItemScript.inHandSprite;
     }
 
-    void SetColorToRarity(Image image, Item item)
+    void SetColorToRarity(Image image, Item theItemScript)
     {
-        if (item.itemType != "Gun") { return; }
+        if (theItemScript.itemType != "Gun") { return; }
 
-        var r = item.rarity;
+        var r = theItemScript.rarity;
 
         if (r == "Common")
         {

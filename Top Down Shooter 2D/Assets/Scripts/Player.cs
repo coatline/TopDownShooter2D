@@ -8,6 +8,7 @@ using TMPro;
 public class Player : MonoBehaviour
 {
     [SerializeField] Canvas worldSpaceCanvas = null;
+    [SerializeField] TMP_Text killCountText = null;
     [SerializeField] Sprite parachuteSprite = null;
     [SerializeField] TMP_Text bottomText = null;
     [SerializeField] Image fallBarPrefab = null;
@@ -19,14 +20,14 @@ public class Player : MonoBehaviour
     Image fallBarFill = null;
     GameObject holdingPlace;
     Rigidbody2D rb = null;
-    GameObject inline;
-    DeathCircle dc;
+    AudioHandler ah;
+    Item overItem;
+    AudioSource a;
 
     Vector3 movement;
 
     public bool landed;
     public bool jumped;
-    bool hasGun;
 
     public int health = 100;
     public int shield = 0;
@@ -41,12 +42,21 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
+        var tmpTexts = FindObjectsOfType<TMP_Text>();
+
+        for (int i = 0; i < tmpTexts.Length; i++)
+        {
+            if (tmpTexts[i].name == "KillCounterText")
+            {
+                killCountText = tmpTexts[i];
+                break;
+            }
+        }
+
+        ah = FindObjectOfType<AudioHandler>();
+        a = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
-
-        dc = FindObjectOfType<DeathCircle>();
-
-        inline = dc.transform.parent.Find("DeathCircleInLine").gameObject;
 
         holdingPlace = transform.Find("HoldingPlace").gameObject;
 
@@ -56,6 +66,36 @@ public class Player : MonoBehaviour
     }
 
     void Update()
+    {
+        Inputs();
+        CheckForStormDamage();
+    }
+
+    public void KilledEnemy()
+    {
+        kills++;
+        killCountText.text = $"{kills}";
+    }
+
+    float stormTimer;
+
+    void CheckForStormDamage()
+    {
+        if (DeathCircle.IsOutsideCircle_Static(transform.position))
+        {
+            if (stormTimer > 1)
+            {
+                TakeDmg(1);
+                stormTimer = 0;
+            }
+            else
+            {
+                stormTimer += Time.deltaTime;
+            }
+        }
+    }
+
+    void Inputs()
     {
         if (Input.GetKey(KeyCode.Tab))
         {
@@ -76,6 +116,7 @@ public class Player : MonoBehaviour
         {
             if (!jumped)
             {
+                ah.PlayJumpSound(a);
                 Jump();
             }
         }
@@ -90,9 +131,9 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (selectedSlot.item != null)
+            if (selectedSlot.currentItemScript != null)
             {
-                selectedSlot.DropItem(transform);
+                DropCurrentItem();
             }
         }
 
@@ -125,30 +166,30 @@ public class Player : MonoBehaviour
 
         //if (transform.position < ((inline.transform.localScale / 2) + inline.transform.position))
 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (overItem)
+            {
+                PickupItem(overItem);
+                overItem = null;
+            }
+        }
+
         if (Input.GetMouseButton(0))
         {
-            if (selectedSlot.item)
+            if (selectedSlot.currentItemScript)
             {
-                if (selectedSlot.item.itemType == "Gun")
+                if (selectedSlot.currentItemScript.itemType == "Gun")
                 {
-                    if (selectedSlot.item.GetComponent<Gun>().gunType == "AR")
-                    {
-                        selectedSlot.item.GetComponent<AR>().player = this;
-                        selectedSlot.item.GetComponent<AR>().CalculateShotTime();
-                    }
-                    else if (selectedSlot.item.GetComponent<Gun>().gunType == "SMG")
-                    {
-                        selectedSlot.item.GetComponent<SMG>().player = this;
-                        selectedSlot.item.GetComponent<SMG>().CalculateShotTime();
-                    }
+                    selectedSlot.currentItemScript.GetComponent<Gun>().Shoot(holdingPlace, this.gameObject, false, a);
                 }
-                else if (selectedSlot.item.itemType == "Healing")
+                else if (selectedSlot.currentItemScript.itemType == "Healing")
                 {
-                    var script = selectedSlot.item.GetComponent<Healing>();
+                    var script = selectedSlot.currentItemScript.GetComponent<Healing>();
 
                     if ((script.isShield && shield >= 100) || (!script.isShield && health >= 100)) { return; }
 
-                    Heal(selectedSlot.item.GetComponent<Healing>().amount, selectedSlot.item.GetComponent<Healing>().isShield);
+                    Heal(selectedSlot.currentItemScript.GetComponent<Healing>().amount, selectedSlot.currentItemScript.GetComponent<Healing>().isShield);
                     selectedSlot.DestroyItem();
                 }
             }
@@ -201,8 +242,18 @@ public class Player : MonoBehaviour
 
         if (health <= 0)
         {
-            print("Dead");
+            Die();
         }
+    }
+
+    void Die()
+    {
+        for (int i = 0; i < sm.slots.Count; i++)
+        {
+            sm.slots[i].DropItem(transform);
+        }
+
+        Destroy(gameObject);
     }
 
     void UpdateHealthUI()
@@ -254,89 +305,31 @@ public class Player : MonoBehaviour
         jumped = true;
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    void DropCurrentItem()
+    {
+        sm.selectedSlot.DropItem(transform);
+    }
+
+    void PickupItem(Item item)
+    {
+        item.PickUp();
+        sm.OpenSlot().ChangeItem(transform, item, sm.selectedSlot);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Pickupable"))
         {
-            if (Input.GetKeyDown(KeyCode.E) && landed)
-            {
-                collision.gameObject.SetActive(false);
-
-                if (!sm.OpenSlot())
-                {
-                    //selectedSlot.DropItem(transform);
-                }
-
-                sm.OpenSlot().ChangeItem(collision.gameObject, selectedSlot);
-
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                collision.gameObject.SetActive(false);
-
-                if (sm.slots[0].item)
-                {
-                    sm.slots[0].DropItem(transform);
-                }
-
-                sm.slots[0].ChangeItem(collision.gameObject, selectedSlot);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                collision.gameObject.SetActive(false);
-
-                if (sm.slots[1].item)
-                {
-                    sm.slots[1].DropItem(transform);
-                }
-
-                sm.slots[1].ChangeItem(collision.gameObject, selectedSlot);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                collision.gameObject.SetActive(false);
-
-                if (sm.slots[2].item)
-                {
-                    sm.slots[2].DropItem(transform);
-                }
-
-                sm.slots[2].ChangeItem(collision.gameObject, selectedSlot);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha4))
-            {
-                collision.gameObject.SetActive(false);
-
-                if (sm.slots[3].item)
-                {
-                    sm.slots[3].DropItem(transform);
-                }
-
-                sm.slots[3].ChangeItem(collision.gameObject, selectedSlot);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha5))
-            {
-                collision.gameObject.SetActive(false);
-
-                if (sm.slots[4].item)
-                {
-                    sm.slots[4].DropItem(transform);
-                }
-
-                sm.slots[4].ChangeItem(collision.gameObject, selectedSlot);
-            }
-        }
-        else if (collision.gameObject.CompareTag("DeathCircle"))
-        {
-            if (gasTimer >= 1)
-            {
-                TakeDmg(5);
-                gasTimer = 0;
-            }
-            else
-            {
-                gasTimer += Time.deltaTime;
-            }
+            overItem = collision.gameObject.GetComponent<Item>();
         }
     }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Pickupable"))
+        {
+            overItem = null;
+        }
+    }
+
 }

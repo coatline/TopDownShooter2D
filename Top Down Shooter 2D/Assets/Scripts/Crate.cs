@@ -12,6 +12,8 @@ public class Crate : MonoBehaviour
         ig = FindObjectOfType<ItemGenerator>();
     }
 
+
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
