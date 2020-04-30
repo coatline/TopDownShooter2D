@@ -86,6 +86,9 @@ TextureImporter:
   - first:
       213: -6062243989588575855
     second: KillCounterGraphic
+  - first:
+      213: -3594290396847044552
+    second: Graphics_1
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -188,10 +191,10 @@ TextureImporter:
       name: Head
       rect:
         serializedVersion: 2
-        x: 2
-        y: 188
-        width: 10
-        height: 10
+        x: 3
+        y: 189
+        width: 8
+        height: 8
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -210,9 +213,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 14
-        y: 194
-        width: 3
-        height: 5
+        y: 195
+        width: 2
+        height: 3
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -230,10 +233,10 @@ TextureImporter:
       name: Plane
       rect:
         serializedVersion: 2
-        x: 156
-        y: 139
-        width: 44
-        height: 50
+        x: 144
+        y: 13
+        width: 46
+        height: 44
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -419,10 +422,10 @@ TextureImporter:
       name: Crate
       rect:
         serializedVersion: 2
-        x: 16
-        y: 157
-        width: 12
-        height: 12
+        x: 17
+        y: 158
+        width: 10
+        height: 10
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -440,8 +443,8 @@ TextureImporter:
       name: OutlineofTestGun
       rect:
         serializedVersion: 2
-        x: 80
-        y: 171
+        x: 86
+        y: 130
         width: 12
         height: 12
       alignment: 0
@@ -503,10 +506,10 @@ TextureImporter:
       name: HealthKit
       rect:
         serializedVersion: 2
-        x: 5
-        y: 123
-        width: 7
-        height: 9
+        x: 6
+        y: 124
+        width: 5
+        height: 7
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -524,10 +527,10 @@ TextureImporter:
       name: BigShieldSprite
       rect:
         serializedVersion: 2
-        x: 14
-        y: 123
-        width: 7
-        height: 9
+        x: 15
+        y: 124
+        width: 5
+        height: 6
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -545,11 +548,11 @@ TextureImporter:
       name: TestSMGGround
       rect:
         serializedVersion: 2
-        x: 98
-        y: 184
-        width: 21
-        height: 12
-      alignment: 0
+        x: 100
+        y: 189
+        width: 12
+        height: 6
+      alignment: 9
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -566,12 +569,12 @@ TextureImporter:
       name: TestSMGOutline
       rect:
         serializedVersion: 2
-        x: 97
-        y: 170
-        width: 23
-        height: 14
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 100
+        y: 180
+        width: 16
+        height: 8
+      alignment: 9
+      pivot: {x: 0.4375, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -587,10 +590,10 @@ TextureImporter:
       name: TestSMGInHand
       rect:
         serializedVersion: 2
-        x: 123
-        y: 179
-        width: 5
-        height: 16
+        x: 124
+        y: 184
+        width: 2
+        height: 12
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -671,10 +674,10 @@ TextureImporter:
       name: AK
       rect:
         serializedVersion: 2
-        x: 80
-        y: 158
-        width: 31
-        height: 10
+        x: 83
+        y: 161
+        width: 17
+        height: 7
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -692,12 +695,12 @@ TextureImporter:
       name: AKOutline
       rect:
         serializedVersion: 2
-        x: 79
-        y: 144
-        width: 34
-        height: 13
+        x: 82
+        y: 151
+        width: 20
+        height: 9
       alignment: 9
-      pivot: {x: 0.515, y: 0.4625}
+      pivot: {x: 0.475, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -713,10 +716,10 @@ TextureImporter:
       name: AKInHand
       rect:
         serializedVersion: 2
-        x: 120
-        y: 148
-        width: 4
-        height: 24
+        x: 121
+        y: 151
+        width: 2
+        height: 13
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

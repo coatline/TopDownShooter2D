@@ -33,6 +33,11 @@ public class Plane : MonoBehaviour
 
     void Update()
     {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).transform.position = transform.position;
+        }
+
         if (transform.position == endPos && !done)
         {
             if (transform.childCount > 0)
@@ -53,9 +58,6 @@ public class Plane : MonoBehaviour
             {
                 player.GetComponent<Player>().Jump();
             }
-
-
-            //Destroy(gameObject);
         }
 
         transform.position = Vector3.MoveTowards(transform.position, endPos, Time.deltaTime * speed);

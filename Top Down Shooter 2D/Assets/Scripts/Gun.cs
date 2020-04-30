@@ -148,10 +148,10 @@ public class Gun : MonoBehaviour
     }
 
 
-    public void Shoot(GameObject holdingPlace, GameObject player, bool isBot, AudioSource audioSource)
+    public void Shoot(GameObject bulletHole, GameObject player, bool isBot, AudioSource audioSource)
     {
         this.playerAudioSource = audioSource;
-        this.bulletHole = holdingPlace;
+        this.bulletHole = bulletHole;
         this.player = player;
         this.isbot = isBot;
 

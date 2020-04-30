@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     SpriteRenderer sr = null;
     Image fallBarFill = null;
     GameObject holdingPlace;
+    GameObject bulletHole;
     Rigidbody2D rb = null;
     AudioHandler ah;
     Item overItem;
@@ -59,6 +60,7 @@ public class Player : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
 
         holdingPlace = transform.Find("HoldingPlace").gameObject;
+        bulletHole = transform.Find("BulletHole").gameObject;
 
         EnableOrDisableChildren(false);
 
@@ -181,7 +183,7 @@ public class Player : MonoBehaviour
             {
                 if (selectedSlot.currentItemScript.itemType == "Gun")
                 {
-                    selectedSlot.currentItemScript.GetComponent<Gun>().Shoot(holdingPlace, this.gameObject, false, a);
+                    selectedSlot.currentItemScript.GetComponent<Gun>().Shoot(bulletHole, this.gameObject, false, a);
                 }
                 else if (selectedSlot.currentItemScript.itemType == "Healing")
                 {
@@ -273,7 +275,7 @@ public class Player : MonoBehaviour
     {
         Vector3 dir = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.AngleAxis(angle - 90, Vector3.forward), Time.deltaTime * 20f);
     }
 
     void EnableOrDisableChildren(bool trueorfalse)
@@ -317,6 +319,14 @@ public class Player : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Pickupable"))
+        {
+            overItem = collision.gameObject.GetComponent<Item>();
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Pickupable"))
         {

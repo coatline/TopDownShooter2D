@@ -19,7 +19,7 @@ public class Bot : MonoBehaviour
     [SerializeField] State state = new State();
     [SerializeField] int inventorySpace;
     float parachuteFallSpeed = .1f;
-    float parachuteMoveSpeed = 7;
+    float parachuteMoveSpeed = 6.5f;
     float freeFallSpeed = .25f;
     public float groundWalkSpeed = 0;
     public float speed = 0;
@@ -31,6 +31,7 @@ public class Bot : MonoBehaviour
     GameObject currentTargetPlayer;
     Crate currentTargetCrate;
     Item currentTargetItem;
+    GameObject bulletHole;
     GameObject land;
 
     public Canvas worldSpaceCanvas = null;
@@ -52,7 +53,7 @@ public class Bot : MonoBehaviour
 
     //TODO MAKE A CONSISTANT SPEED THAT THEY MOVE AT
 
-    void Start()
+    void Awake()
     {
         seenItems = new List<Item>();
         attackers = new List<GameObject>();
@@ -62,6 +63,7 @@ public class Bot : MonoBehaviour
         holdingPlacesr = transform.Find("HoldingPlace").GetComponent<SpriteRenderer>();
         headbc = transform.Find("Head").GetComponent<BoxCollider2D>();
         trigger = transform.Find("Trigger").GetComponent<BoxCollider2D>();
+        bulletHole = transform.Find("BulletHole").gameObject;
 
         land = GameObject.FindGameObjectWithTag("Land");
 
@@ -92,11 +94,6 @@ public class Bot : MonoBehaviour
         rb.angularVelocity = 0;
         rb.velocity = Vector2.zero;
         trigger.gameObject.transform.rotation = Quaternion.identity;
-
-        if (!jumped)
-        {
-            transform.position = transform.parent.transform.position;
-        }
 
         Intelligence();
         DoStates();
@@ -217,7 +214,7 @@ public class Bot : MonoBehaviour
 
     void Intelligence()
     {
-        //Attack FleeFromEnemy RunFromStorm GetItems SearchforItems GoToLand
+        //Attack GetItems SearchforItems FleeFromEnemy RunFromStorm
 
         if (state == State.fleeingFromStorm)
         {
@@ -227,40 +224,44 @@ public class Bot : MonoBehaviour
             }
         }
 
-        if (state == State.attacking)
+        if (attackers.Count > 0)
         {
-            if (!HasGun())
+            if (HasGun())
             {
-                state = State.fleeingFromEnemy;
+                state = State.attacking;
             }
             else
             {
-                if (!currentTargetPlayer)
+                if (state != State.goingToItem && state != State.pickingUpItem)
                 {
-                    if (attackers.Count > 0)
-                    {
-                        currentTargetPlayer = ClosestAttacker();
-                    }
-                    else
-                    {
-                        state = State.searchingForItems;
-                    }
+                    state = State.fleeingFromEnemy;
                 }
+            }
+        }
+
+        if (state == State.attacking)
+        {
+            if (!currentTargetPlayer)
+            {
+                if (attackers.Count > 0)
+                {
+                    currentTargetPlayer = ClosestAttacker();
+                }
+                else
+                {
+                    state = State.searchingForItems;
+                }
+            }
+            else if (currentTargetPlayer != ClosestAttacker())
+            {
+                currentTargetPlayer = ClosestAttacker();
             }
         }
         else
         {
-            if (state == State.fleeingFromEnemy)
+            if (state == State.pickingUpItem)
             {
-                if (HasGun())
-                {
-                    ChooseWhatItemToHold();
-                    state = State.attacking;
-                }
-                else if (ClosestAttacker() && Vector2.Distance(ClosestAttacker().transform.position, transform.position) > 20)
-                {
-                    state = State.searchingForItems;
-                }
+
             }
             else
             {
@@ -273,9 +274,17 @@ public class Bot : MonoBehaviour
                 }
                 else
                 {
-                    if (state == State.pickingUpItem)
+                    if (state == State.fleeingFromEnemy)
                     {
-
+                        if (HasGun())
+                        {
+                            ChooseWhatItemToHold();
+                            state = State.attacking;
+                        }
+                        else if (ClosestAttacker() && Vector2.Distance(ClosestAttacker().transform.position, transform.position) > 20)
+                        {
+                            state = State.searchingForItems;
+                        }
                     }
                     else
                     {
@@ -294,6 +303,12 @@ public class Bot : MonoBehaviour
 
                                 CheckForMissingSeenItems();
                                 CheckForMissingSeenCrates();
+                            }
+                            else
+                            {
+                                if (state == State.goingToLand)
+                                {
+                                }
                             }
                         }
                     }
@@ -391,46 +406,11 @@ public class Bot : MonoBehaviour
 
         Aim();
         var itemGunScript = currentItem.GetComponent<Gun>();
-        itemGunScript.Shoot(holdingPlacesr.gameObject, gameObject, true, a);
+        itemGunScript.Shoot(bulletHole, gameObject, true, a);
 
         if (Vector2.Distance(currentTargetPlayer.transform.position, transform.position) > itemGunScript.bulletLifeTime / itemGunScript.bulletSpeed)
         {
             MoveTowards(currentTargetPlayer.transform, 1);
-        }
-    }
-
-    void MoveTowards(Transform target, int dir)
-    {
-        Vector3 dire = (transform.position - target.position);
-        float angele = Mathf.Atan2(dire.y, dire.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angele + 90);
-
-        var toTargeta = (target.position - transform.position).normalized;
-        transform.Translate(toTargeta * speed * Time.deltaTime * dir, Space.World);
-    }
-
-    void Aim()
-    {
-        var dir = currentTargetPlayer.transform.position - transform.position;
-        var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        //angle += Random.Range(-5, 5);
-        transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
-    }
-
-    void GoToLand()
-    {
-        MoveTowards(land.transform, 1);
-
-        if (Vector2.Distance(transform.position, land.transform.position) <= 199)
-        {
-            if (seenItems.Count > 0)
-            {
-                state = State.goingToItem;
-            }
-            else
-            {
-                state = State.searchingForItems;
-            }
         }
     }
 
@@ -516,23 +496,29 @@ public class Bot : MonoBehaviour
         }
     }
 
-    Crate ChooseTargetCrate()
+    void Aim()
     {
-        Crate closest = null;
+        var dir = currentTargetPlayer.transform.position - transform.position;
+        var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        //angle += Random.Range(-5, 5);
+        transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+    }
 
-        for (int i = 0; i < seenCrates.Count; i++)
+    void GoToLand()
+    {
+        MoveTowards(land.transform, 1);
+
+        if (Vector2.Distance(transform.position, land.transform.position) <= 199)
         {
-            if (!closest)
+            if (seenItems.Count > 0)
             {
-                closest = seenCrates[i];
+                state = State.goingToItem;
             }
-            else if (Vector2.Distance(transform.position, closest.transform.position) < Vector2.Distance(transform.position, seenCrates[i].transform.position))
+            else
             {
-                closest = seenCrates[i];
+                state = State.searchingForItems;
             }
         }
-
-        return closest;
     }
 
     void FleeFromStorm()
@@ -551,6 +537,19 @@ public class Bot : MonoBehaviour
         else
         {
             MoveTowards(ClosestAttacker().transform, -1);
+        }
+    }
+
+    void ShowCurrentItemInHand()
+    {
+        if (!currentItem)
+        {
+            print("No Item TO SHOW!");
+            holdingPlacesr.sprite = null;
+        }
+        else
+        {
+            holdingPlacesr.sprite = currentItem.inHandSprite;
         }
     }
 
@@ -640,17 +639,49 @@ public class Bot : MonoBehaviour
         state = State.searchingForItems;
     }
 
-    void ShowCurrentItemInHand()
+    Item ChooseTargetItem()
     {
-        if (!currentItem)
+        CheckForMissingSeenItems();
+
+        if (seenItems.Count == 0)
         {
-            print("No Item TO SHOW!");
-            holdingPlacesr.sprite = null;
+            return null;
         }
-        else
+
+        Item closest = null;
+
+        for (int i = 0; i < seenItems.Count; i++)
         {
-            holdingPlacesr.sprite = currentItem.inHandSprite;
+            if (!closest)
+            {
+                closest = seenItems[i];
+            }
+            else if (Vector2.Distance(transform.position, closest.transform.position) < Vector2.Distance(transform.position, seenItems[i].transform.position))
+            {
+                closest = seenItems[i];
+            }
         }
+
+        return closest;
+    }
+
+    Crate ChooseTargetCrate()
+    {
+        //Crate closest = null;
+
+        //for (int i = 0; i < seenCrates.Count; i++)
+        //{
+        //    if (!closest)
+        //    {
+        //        closest = seenCrates[i];
+        //    }
+        //    else if (Vector2.Distance(transform.position, closest.transform.position) < Vector2.Distance(transform.position, seenCrates[i].transform.position))
+        //    {
+        //        closest = seenCrates[i];
+        //    }
+        //}
+
+        return seenCrates[Random.Range(0, seenCrates.Count)];
     }
 
     GameObject ClosestAttacker()
@@ -692,6 +723,72 @@ public class Bot : MonoBehaviour
         StartCoroutine(Search());
     }
 
+    void AddToSeenItems(Item obj)
+    {
+        seenItems.Add(obj);
+    }
+
+    void AddToSeenCrates(Crate obj)
+    {
+        seenCrates.Add(obj);
+    }
+
+    void ChangeDir()
+    {
+        Vector3 dir = transform.position - new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angle + 90);
+    }
+
+    void Land()
+    {
+        if (fallBarFill != null)
+            Destroy(fallBarFill.transform.parent.gameObject);
+        EnableOrDisableChildren(true);
+        sr.sprite = null;
+        landed = true;
+        speed = groundWalkSpeed;
+    }
+
+    void EnableOrDisableChildren(bool trueorfalse)
+    {
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            if (transform.GetChild(i).name == "Trigger") { continue; }
+            transform.GetChild(i).gameObject.SetActive(trueorfalse);
+        }
+    }
+
+    public void Jump()
+    {
+        if (jumped) { return; }
+
+        transform.rotation = Quaternion.Euler(0, 0, Random.Range(0, 361));
+        var yah = Instantiate(fallBarPrefab, transform.position, Quaternion.Euler(0, 0, 90), worldSpaceCanvas.transform);
+        fallBarFill = yah.transform.Find("Fill").GetComponent<Image>();
+        sr.sprite = parachuteSprite;
+        speed = parachuteMoveSpeed;
+        transform.parent = null;
+        trigger.enabled = true;
+        jumped = true;
+    }
+
+    void MoveTowards(Transform target, int dir)
+    {
+        Vector3 dire = (transform.position - target.position);
+
+        if (dir == -1)
+        {
+            dire = -dire;
+        }
+
+        float angele = Mathf.Atan2(dire.y, dire.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angele + 90);
+
+        var toTargeta = (target.position - transform.position).normalized;
+        transform.Translate(toTargeta * speed * Time.deltaTime * dir, Space.World);
+    }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Pickupable"))
@@ -700,10 +797,10 @@ public class Bot : MonoBehaviour
 
             if (seenItems.Contains(itemScript))
             {
-                if (currentTargetItem == itemScript)
-                {
-                    currentTargetItem = ChooseTargetItem();
-                }
+                //if (currentTargetItem == itemScript)
+                //{
+                //    currentTargetItem = ChooseTargetItem();
+                //}
 
                 seenItems.Remove(itemScript);
             }
@@ -715,13 +812,14 @@ public class Bot : MonoBehaviour
 
             if (seenCrates.Contains(crateScript))
             {
-                if (currentTargetCrate == crateScript)
-                {
-                    currentTargetCrate = ChooseTargetCrate();
-                }
+                //if (currentTargetCrate == crateScript)
+                //{
+                //    currentTargetCrate = ChooseTargetCrate();
+                //}
+
+                seenCrates.Remove(crateScript);
             }
 
-            seenCrates.Remove(crateScript);
         }
     }
 
@@ -754,19 +852,6 @@ public class Bot : MonoBehaviour
         {
             if (collision.gameObject.CompareTag("Player"))
             {
-                if (collision.gameObject.GetComponentInParent<Player>().selectedSlot.currentItemScript)
-                {
-                    if (HasGun())
-                    {
-                        state = State.attacking;
-                        ChooseWhatItemToHold();
-                    }
-                    else
-                    {
-                        state = State.fleeingFromEnemy;
-                    }
-                }
-
                 if (!attackers.Contains(collision.gameObject))
                 {
                     attackers.Add(collision.gameObject.transform.parent.gameObject);
@@ -774,19 +859,6 @@ public class Bot : MonoBehaviour
             }
             else if (collision.gameObject.CompareTag("Bot"))
             {
-                if (collision.gameObject.GetComponentInParent<Bot>().items.Count > 0)
-                {
-                    if (HasGun())
-                    {
-                        state = State.attacking;
-                        ChooseWhatItemToHold();
-                    }
-                    else
-                    {
-                        state = State.fleeingFromEnemy;
-                    }
-                }
-
                 if (!attackers.Contains(collision.gameObject))
                 {
                     attackers.Add(collision.gameObject.transform.parent.gameObject);
@@ -807,82 +879,5 @@ public class Bot : MonoBehaviour
 
             ChangeDir();
         }
-    }
-
-    void AddToSeenItems(Item obj)
-    {
-        seenItems.Add(obj);
-    }
-
-    void AddToSeenCrates(Crate obj)
-    {
-        seenCrates.Add(obj);
-    }
-
-    Item ChooseTargetItem()
-    {
-        CheckForMissingSeenItems();
-
-        if (seenItems.Count == 0)
-        {
-            return null;
-        }
-
-        Item closest = null;
-
-        for (int i = 0; i < seenItems.Count; i++)
-        {
-            if (!closest)
-            {
-                closest = seenItems[i];
-            }
-            else if (Vector2.Distance(transform.position, closest.transform.position) < Vector2.Distance(transform.position, seenItems[i].transform.position))
-            {
-                closest = seenItems[i];
-            }
-        }
-
-        return closest;
-    }
-
-    void ChangeDir()
-    {
-        Vector3 dir = transform.position - new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angle + 90);
-    }
-
-    void Land()
-    {
-        if (fallBarFill != null)
-            Destroy(fallBarFill.transform.parent.gameObject);
-        EnableOrDisableChildren(true);
-        sr.sprite = null;
-        landed = true;
-        speed = groundWalkSpeed;
-        state = State.searchingForItems;
-    }
-
-    void EnableOrDisableChildren(bool trueorfalse)
-    {
-        for (int i = transform.childCount - 1; i >= 0; i--)
-        {
-            if (transform.GetChild(i).name == "Trigger") { continue; }
-            transform.GetChild(i).gameObject.SetActive(trueorfalse);
-        }
-    }
-
-    public void Jump()
-    {
-        if (jumped) { return; }
-
-        transform.rotation = Quaternion.Euler(0, 0, Random.Range(0, 361));
-        var yah = Instantiate(fallBarPrefab, transform.position, Quaternion.Euler(0, 0, 90), worldSpaceCanvas.transform);
-        fallBarFill = yah.transform.Find("Fill").GetComponent<Image>();
-        sr.sprite = parachuteSprite;
-        speed = parachuteMoveSpeed;
-        transform.parent = null;
-        trigger.enabled = true;
-        jumped = true;
     }
 }

@@ -16,8 +16,8 @@ public class DeathCircle : MonoBehaviour
     [SerializeField] float maxMovement;
     [SerializeField] float minMovement;
     [SerializeField] float shrinkTimer;
-    float circleShrinkSpeed;
-    float circleMoveSpeed;
+    [SerializeField] float circleShrinkSpeed;
+    [SerializeField] float circleMoveSpeed;
 
     bool isMoving;
 
@@ -35,9 +35,6 @@ public class DeathCircle : MonoBehaviour
     private void Awake()
     {
         instance = this;
-
-        circleShrinkSpeed = 25;
-        circleMoveSpeed = 10;
 
         circleTransform = transform.Find("circle");
         topTransform = transform.Find("top");
