@@ -190,11 +190,12 @@ MonoBehaviour:
   player: {fileID: 0}
   burstDelay: 0.3
   shotRate: 0.09
+  bulletCount: 1
   bulletLifeTime: 0.75
   damagePerBullet: 10
   bulletSpeed: 1750
   gunType: AR
-  aimError: 1
+  aimError: 3.5
 --- !u!212 &4723590185943544614
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -381,7 +382,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.1, y: 1}
+    oldSize: {x: 1.7, y: 0.7}
     newSize: {x: 1.2, y: 0.1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

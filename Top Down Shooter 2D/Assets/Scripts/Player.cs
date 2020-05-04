@@ -318,6 +318,14 @@ public class Player : MonoBehaviour
         sm.OpenSlot().ChangeItem(transform, item, sm.selectedSlot);
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Crate"))
+        {
+            collision.gameObject.GetComponent<Crate>().Open();
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Pickupable"))

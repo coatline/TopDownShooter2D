@@ -7,49 +7,19 @@ public class Bullet : MonoBehaviour
     public GameObject player;
     public float lifeTime;
     public bool botBullet;
-    SpriteRenderer sr;
-    Rigidbody2D rb;
+    SelfDestruct sd;
     public int dmg;
     bool dying;
 
     private void Start()
     {
-        sr = GetComponent<SpriteRenderer>();
-        rb = GetComponent<Rigidbody2D>();
-
-        Invoke("DoDie", lifeTime);
+        sd = GetComponent<SelfDestruct>();
+        Invoke("Die", lifeTime);
     }
 
-    float alph = 1;
-
-    void DoDie()
+    void Die()
     {
-        dying = true;
-
-        rb.velocity = Vector2.zero;
-
-        alph -= Time.deltaTime * 1.25f;
-        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, alph);
-
-        if (alph <= 0)
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    bool done;
-
-    private void Update()
-    {
-        if (!done)
-        {
-            done = true;
-        }
-
-        if (dying)
-        {
-            DoDie();
-        }
+        sd.DoDie();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -100,6 +70,7 @@ public class Bullet : MonoBehaviour
             }
 
             dying = true;
+            Die();
         }
     }
 }

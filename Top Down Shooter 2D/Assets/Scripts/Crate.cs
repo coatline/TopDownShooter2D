@@ -5,39 +5,17 @@ using UnityEngine;
 public class Crate : MonoBehaviour
 {
     ItemGenerator ig;
-    int health = 5;
+    SelfDestruct sd;
 
     private void Awake()
     {
         ig = FindObjectOfType<ItemGenerator>();
+        sd = GetComponent<SelfDestruct>();
     }
 
-
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Open();
-        }
-        else if (collision.gameObject.CompareTag("Bot"))
-        {
-            Open();
-        }
-        else if (collision.gameObject.CompareTag("Bullet"))
-        {
-            health--;
-
-            if (health <= 0)
-            {
-                Open();
-            }
-        }
-    }
-
-    void Open()
+    public void Open()
     {
         ig.GenerateItem(transform.position);
-        Destroy(gameObject);
+        sd.DoDie();
     }
 }

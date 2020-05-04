@@ -18,6 +18,7 @@ public class Bot : MonoBehaviour
 
     [SerializeField] State state = new State();
     [SerializeField] int inventorySpace;
+    [SerializeField] float turnSpeed;
     float parachuteFallSpeed = .1f;
     float parachuteMoveSpeed = 6.5f;
     float freeFallSpeed = .25f;
@@ -43,6 +44,7 @@ public class Bot : MonoBehaviour
     BoxCollider2D trigger;
     BoxCollider2D headbc;
     Item currentItem;
+    SelfDestruct sd;
     Rigidbody2D rb;
     AudioSource a;
 
@@ -67,6 +69,7 @@ public class Bot : MonoBehaviour
 
         land = GameObject.FindGameObjectWithTag("Land");
 
+        sd = GetComponent<SelfDestruct>();
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         a = GetComponent<AudioSource>();
@@ -209,7 +212,7 @@ public class Bot : MonoBehaviour
             items[i].Drop(transform);
         }
 
-        Destroy(gameObject);
+        sd.DoDie();
     }
 
     void Intelligence()
@@ -501,7 +504,7 @@ public class Bot : MonoBehaviour
         var dir = currentTargetPlayer.transform.position - transform.position;
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         //angle += Random.Range(-5, 5);
-        transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(angle - 90, Vector3.forward), Time.deltaTime);
     }
 
     void GoToLand()
@@ -719,7 +722,7 @@ public class Bot : MonoBehaviour
     {
         startedCoroutine = true;
         yield return new WaitForSeconds(Random.Range(1, 5));
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, Random.Range(0, 360f)));
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, Random.Range(0, 360f))), Time.deltaTime * turnSpeed);
         StartCoroutine(Search());
     }
 
@@ -783,10 +786,18 @@ public class Bot : MonoBehaviour
         }
 
         float angele = Mathf.Atan2(dire.y, dire.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angele + 90);
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, angele + 90), Time.deltaTime * turnSpeed);
 
         var toTargeta = (target.position - transform.position).normalized;
         transform.Translate(toTargeta * speed * Time.deltaTime * dir, Space.World);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Crate"))
+        {
+            collision.gameObject.GetComponent<Crate>().Open();
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)

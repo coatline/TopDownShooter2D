@@ -14,6 +14,7 @@ public class Gun : MonoBehaviour
     AudioHandler ah;
     float shotTimer;
     //////////////////////
+    [SerializeField] int bulletCount;
     public float bulletLifeTime;
     public int damagePerBullet;
     public float bulletSpeed;
@@ -30,40 +31,7 @@ public class Gun : MonoBehaviour
 
     private void Start()
     {
-        var outsr = transform.Find("Outline").GetComponent<SpriteRenderer>();
-
-        var gunrarity = GetComponent<Item>().rarity;
-
-        if (gunrarity == "Common")
-        {
-            //stay the same?
-            outsr.color = Color.gray;
-        }
-        else if (gunrarity == "Uncommon")
-        {
-            damagePerBullet++;
-            outsr.color = Color.green;
-        }
-        else if (gunrarity == "Rare")
-        {
-            damagePerBullet += 3;
-            outsr.color = Color.cyan;
-        }
-        else if (gunrarity == "Epic")
-        {
-            damagePerBullet += 5;
-            outsr.color = new Color(.9f, .1f, .9f);
-        }
-        else if (gunrarity == "Legendary")
-        {
-            damagePerBullet += 7;
-            outsr.color = Color.yellow;
-        }
-        else
-        {
-            damagePerBullet += 10;
-            outsr.color = Color.red;
-        }
+        ChooseRarity();
     }
 
     float burstTimer;
@@ -72,8 +40,6 @@ public class Gun : MonoBehaviour
 
     public void CalculateShotTime()
     {
-        shooting = true;
-
         shotTimer += Time.deltaTime;
 
         if (burstCount > 0)
@@ -118,33 +84,21 @@ public class Gun : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (!shooting)
-        {
-            shotTimer = shotRate;
-            burstTimer = burstDelay;
-        }
-        else
-        {
-            if (Input.GetMouseButtonUp(0))
-            {
-                shooting = false;
-            }
-        }
-    }
-
     void FireBullet()
     {
         ah.PlayGunShotSound(playerAudioSource);
-        var newBullet = Instantiate(bulletPrefab, bulletHole.transform.position, Quaternion.identity);
-        var bulletScript = newBullet.GetComponent<Bullet>();
-        bulletScript.lifeTime = bulletLifeTime;
-        bulletScript.dmg = damagePerBullet;
-        bulletScript.botBullet = isbot;
-        bulletScript.player = player;
-        newBullet.GetComponent<Rigidbody2D>().AddForce(player.transform.up * bulletSpeed);
-        newBullet.transform.rotation = player.transform.rotation;
+
+        for (int i = 1; i < bulletCount + 1; i++)
+        {
+            var newBullet = Instantiate(bulletPrefab, bulletHole.transform.position, player.transform.rotation);
+            newBullet.transform.Rotate(new Vector3(0, 0, Random.Range(-aimError * i, aimError * i)));
+            newBullet.GetComponent<Rigidbody2D>().AddForce(newBullet.transform.up * bulletSpeed);
+            var bulletScript = newBullet.GetComponent<Bullet>();
+            bulletScript.lifeTime = bulletLifeTime;
+            bulletScript.dmg = damagePerBullet;
+            bulletScript.botBullet = isbot;
+            bulletScript.player = player;
+        }
     }
 
 
@@ -158,4 +112,41 @@ public class Gun : MonoBehaviour
         CalculateShotTime();
     }
 
+
+    void ChooseRarity()
+    {
+        var outsr = transform.Find("Outline").GetComponent<SpriteRenderer>();
+        var gunrarity = GetComponent<Item>().rarity;
+
+        if (gunrarity == "Common")
+        {
+            //stay the same?
+            outsr.color = Color.gray;
+        }
+        else if (gunrarity == "Uncommon")
+        {
+            damagePerBullet++;
+            outsr.color = Color.green;
+        }
+        else if (gunrarity == "Rare")
+        {
+            damagePerBullet += 3;
+            outsr.color = Color.cyan;
+        }
+        else if (gunrarity == "Epic")
+        {
+            damagePerBullet += 5;
+            outsr.color = new Color(.9f, .1f, .9f);
+        }
+        else if (gunrarity == "Legendary")
+        {
+            damagePerBullet += 7;
+            outsr.color = Color.yellow;
+        }
+        else
+        {
+            damagePerBullet += 10;
+            outsr.color = Color.red;
+        }
+    }
 }

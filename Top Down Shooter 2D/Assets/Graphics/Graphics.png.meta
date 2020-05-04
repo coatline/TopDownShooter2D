@@ -88,7 +88,16 @@ TextureImporter:
     second: KillCounterGraphic
   - first:
       213: -3594290396847044552
-    second: Graphics_1
+    second: Shotgun_Outline
+  - first:
+      213: -2878749601138285865
+    second: Shotgun
+  - first:
+      213: 2510310716856052990
+    second: ShotgunInHand
+  - first:
+      213: 5463643145767916427
+    second: Door
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -443,8 +452,8 @@ TextureImporter:
       name: OutlineofTestGun
       rect:
         serializedVersion: 2
-        x: 86
-        y: 130
+        x: 80
+        y: 171
         width: 12
         height: 12
       alignment: 0
@@ -750,6 +759,90 @@ TextureImporter:
       bones: []
       spriteID: 19973dae5359edba0800000000000000
       internalID: -6062243989588575855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shotgun_Outline
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 131
+        width: 20
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 838855c6de38e1ec0800000000000000
+      internalID: -3594290396847044552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShotgunInHand
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 137
+        width: 2
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d2ead27d70ac08d0800000000000000
+      internalID: -2878749601138285865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shotgun
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 140
+        width: 18
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efcaf0afb4a66d220800000000000000
+      internalID: 2510310716856052990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 52
+        width: 21
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b839ef25e72c2db40800000000000000
+      internalID: 5463643145767916427
       vertices: []
       indices: 
       edges: []

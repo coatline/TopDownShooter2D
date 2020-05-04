@@ -71,7 +71,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -2
-  m_Sprite: {fileID: 4739694132180214966, guid: 918068b0049524b4681bcfc7b5baea89,
+  m_Sprite: {fileID: -3594290396847044552, guid: 918068b0049524b4681bcfc7b5baea89,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -125,11 +125,11 @@ GameObject:
   - component: {fileID: 4723590185943544612}
   - component: {fileID: 4723590185943544613}
   - component: {fileID: 4723590185943544614}
-  - component: {fileID: 4723590185943544633}
   - component: {fileID: 8053090054874041596}
-  - component: {fileID: -5079823734932797463}
+  - component: {fileID: -9019235571439330509}
+  - component: {fileID: 4776846476069790658}
   m_Layer: 8
-  m_Name: Test SMG
+  m_Name: Shotgun
   m_TagString: Pickupable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -163,13 +163,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c810c1a268d3a248917e5c1e2a771f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundSprite: {fileID: 5571572480089642066, guid: 918068b0049524b4681bcfc7b5baea89,
+  groundSprite: {fileID: -2878749601138285865, guid: 918068b0049524b4681bcfc7b5baea89,
     type: 3}
-  inHandSprite: {fileID: -1325375620925863998, guid: 918068b0049524b4681bcfc7b5baea89,
+  inHandSprite: {fileID: 2510310716856052990, guid: 918068b0049524b4681bcfc7b5baea89,
     type: 3}
   slotSprite: {fileID: 0}
   itemType: Gun
-  itemName: TestSMG
+  itemName: AK
   rarity: 
   pickedUp: 0
 --- !u!114 &4723590185943544613
@@ -186,16 +186,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 1782191973860338748, guid: 7e65528465746104da6748dc05a620af,
     type: 3}
-  burstCount: 4
+  burstCount: 0
   player: {fileID: 0}
-  burstDelay: 0.15
-  shotRate: 0.05
-  bulletCount: 1
-  bulletLifeTime: 0.3
-  damagePerBullet: 4
-  bulletSpeed: 1600
-  gunType: SMG
-  aimError: 15
+  burstDelay: 0
+  shotRate: 1
+  bulletCount: 7
+  bulletLifeTime: 0.4
+  damagePerBullet: 10
+  bulletSpeed: 1250
+  gunType: Shotgun
+  aimError: 4
 --- !u!212 &4723590185943544614
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -236,7 +236,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -2
-  m_Sprite: {fileID: 5571572480089642066, guid: 918068b0049524b4681bcfc7b5baea89,
+  m_Sprite: {fileID: -2878749601138285865, guid: 918068b0049524b4681bcfc7b5baea89,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -248,22 +248,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &4723590185943544633
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4723590185943544611}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.1667738, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.9167738
 --- !u!50 &8053090054874041596
 Rigidbody2D:
   serializedVersion: 4
@@ -285,7 +269,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!82 &-5079823734932797463
+--- !u!82 &-9019235571439330509
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -381,3 +365,29 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!61 &4776846476069790658
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4723590185943544611}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.8, y: 0.6}
+    newSize: {x: 1.2, y: 0.1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 3.1, y: 1}
+  m_EdgeRadius: 0

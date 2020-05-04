@@ -182,6 +182,7 @@ GameObject:
   - component: {fileID: 9118597216416987337}
   - component: {fileID: -2972601369896667824}
   - component: {fileID: 1157464164250452670}
+  - component: {fileID: -8545226443101439568}
   m_Layer: 10
   m_Name: Bot
   m_TagString: Bot
@@ -196,7 +197,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9118597216416987341}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children:
@@ -295,6 +296,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   state: 0
   inventorySpace: 0
+  turnSpeed: 5
   groundWalkSpeed: 6
   speed: 0
   health: 100
@@ -400,6 +402,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-8545226443101439568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9118597216416987341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cb9e7c67a2bf0a4abb26fc1dd49278b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeSpeed: 1.75
 --- !u!1 &9118597216664607862
 GameObject:
   m_ObjectHideFlags: 0
