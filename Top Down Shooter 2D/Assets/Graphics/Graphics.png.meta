@@ -19,7 +19,7 @@ TextureImporter:
     second: Parachute
   - first:
       213: 8109156625128792913
-    second: FallBarInLine
+    second: FallBarFill
   - first:
       213: 5997688581893539255
     second: Outer Bar
@@ -67,7 +67,7 @@ TextureImporter:
     second: TestSMGInHand
   - first:
       213: -8662075319188904508
-    second: Graphics_0
+    second: WhitePixel
   - first:
       213: -4065532280177297973
     second: Mini Potion
@@ -98,6 +98,9 @@ TextureImporter:
   - first:
       213: 5463643145767916427
     second: Door
+  - first:
+      213: -7821212624033336381
+    second: Graphics_0
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -201,7 +204,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 3
-        y: 189
+        y: 489
         width: 8
         height: 8
       alignment: 0
@@ -222,7 +225,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 14
-        y: 195
+        y: 495
         width: 2
         height: 3
       alignment: 0
@@ -243,7 +246,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 144
-        y: 13
+        y: 313
         width: 46
         height: 44
       alignment: 0
@@ -263,8 +266,8 @@ TextureImporter:
       name: Ground
       rect:
         serializedVersion: 2
-        x: 2
-        y: 158
+        x: 15
+        y: 242
         width: 10
         height: 10
       alignment: 9
@@ -284,10 +287,10 @@ TextureImporter:
       name: Parachute
       rect:
         serializedVersion: 2
-        x: 22
-        y: 184
-        width: 28
-        height: 14
+        x: 23
+        y: 485
+        width: 26
+        height: 12
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -302,11 +305,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FallBarInLine
+      name: FallBarFill
       rect:
         serializedVersion: 2
         x: 22
-        y: 176
+        y: 476
         width: 12
         height: 1
       alignment: 0
@@ -327,7 +330,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 56
-        y: 179
+        y: 479
         width: 19
         height: 19
       alignment: 0
@@ -347,10 +350,10 @@ TextureImporter:
       name: Bullet
       rect:
         serializedVersion: 2
-        x: 9
-        y: 179
-        width: 4
-        height: 6
+        x: 10
+        y: 480
+        width: 3
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -386,53 +389,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GroundTestGunSprite
-      rect:
-        serializedVersion: 2
-        x: 81
-        y: 184
-        width: 10
-        height: 10
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d198c4a8ec0ce924fb3fcc83b18c81ff
-      internalID: -7820513185573022212
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: HandTestGunSprite
-      rect:
-        serializedVersion: 2
-        x: 93
-        y: 181
-        width: 3
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 83919b3c76db2084b8b11de20a8ef76d
-      internalID: 2834093059825265682
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Crate
       rect:
         serializedVersion: 2
         x: 17
-        y: 158
+        y: 458
         width: 10
         height: 10
       alignment: 0
@@ -449,34 +410,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: OutlineofTestGun
-      rect:
-        serializedVersion: 2
-        x: 80
-        y: 171
-        width: 12
-        height: 12
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c278b2f7f03cbcc438c271a9c2a51959
-      internalID: -7717128300933111095
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: HealthUi
       rect:
         serializedVersion: 2
-        x: 4
-        y: 141
-        width: 31
-        height: 13
+        x: 6
+        y: 443
+        width: 27
+        height: 9
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -495,7 +435,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 33
-        y: 158
+        y: 458
         width: 25
         height: 2
       alignment: 0
@@ -516,7 +456,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 6
-        y: 124
+        y: 424
         width: 5
         height: 7
       alignment: 0
@@ -537,7 +477,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 15
-        y: 124
+        y: 424
         width: 5
         height: 6
       alignment: 0
@@ -558,7 +498,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 100
-        y: 189
+        y: 489
         width: 12
         height: 6
       alignment: 9
@@ -579,8 +519,8 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 100
-        y: 180
-        width: 16
+        y: 480
+        width: 14
         height: 8
       alignment: 9
       pivot: {x: 0.4375, y: 0.5}
@@ -600,7 +540,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 124
-        y: 184
+        y: 484
         width: 2
         height: 12
       alignment: 0
@@ -617,11 +557,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Graphics_0
+      name: WhitePixel
       rect:
         serializedVersion: 2
-        x: 21
-        y: 121
+        x: 0
+        y: 499
         width: 1
         height: 1
       alignment: 0
@@ -641,10 +581,10 @@ TextureImporter:
       name: Mini Potion
       rect:
         serializedVersion: 2
-        x: 23
-        y: 123
-        width: 4
-        height: 9
+        x: 24
+        y: 424
+        width: 2
+        height: 6
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -663,7 +603,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 21
-        y: 171
+        y: 471
         width: 14
         height: 3
       alignment: 0
@@ -684,7 +624,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 83
-        y: 161
+        y: 461
         width: 17
         height: 7
       alignment: 0
@@ -705,8 +645,8 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 82
-        y: 151
-        width: 20
+        y: 451
+        width: 19
         height: 9
       alignment: 9
       pivot: {x: 0.475, y: 0.5}
@@ -726,7 +666,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 121
-        y: 151
+        y: 451
         width: 2
         height: 13
       alignment: 0
@@ -747,7 +687,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 37
-        y: 146
+        y: 446
         width: 7
         height: 7
       alignment: 0
@@ -768,7 +708,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 77
-        y: 131
+        y: 431
         width: 20
         height: 8
       alignment: 0
@@ -789,7 +729,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 105
-        y: 137
+        y: 437
         width: 2
         height: 10
       alignment: 0
@@ -810,7 +750,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 78
-        y: 140
+        y: 440
         width: 18
         height: 6
       alignment: 0
@@ -831,11 +771,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 19
-        y: 52
+        y: 352
         width: 21
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        height: 6
+      alignment: 9
+      pivot: {x: 0.05, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -843,6 +783,27 @@ TextureImporter:
       bones: []
       spriteID: b839ef25e72c2db40800000000000000
       internalID: 5463643145767916427
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Graphics_0
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 359
+        width: 61
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c331b79e88757390800000000000000
+      internalID: -7821212624033336381
       vertices: []
       indices: 
       edges: []

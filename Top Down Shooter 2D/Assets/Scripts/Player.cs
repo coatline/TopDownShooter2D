@@ -139,22 +139,38 @@ public class Player : MonoBehaviour
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (landed)
+            {
+                if (overItem)
+                {
+                    PickupItem(overItem);
+                    overItem = null;
+                }
+                else if (selectedDoor)
+                {
+                    selectedDoor.Interact(transform);
+                }
+            }
+
+        }
+
         if (jumped && !landed)
         {
             fallBarFill.transform.parent.transform.position = transform.position - new Vector3(3, 0, 0);
-
-            if (!Input.GetKey(KeyCode.Space))
-            {
-                fallBarFill.fillAmount -= parachuteFallSpeed * Time.deltaTime;
-                transform.localScale -= new Vector3(parachuteFallSpeed / 2, parachuteFallSpeed / 2) * Time.deltaTime;
-                fallBarFill.color = Color.white;
-            }
 
             if (Input.GetKey(KeyCode.Space))
             {
                 fallBarFill.fillAmount -= freeFallSpeed * Time.deltaTime;
                 transform.localScale -= new Vector3(freeFallSpeed / 2, freeFallSpeed / 2) * Time.deltaTime;
                 fallBarFill.color = Color.cyan;
+            }
+            else
+            {
+                fallBarFill.fillAmount -= parachuteFallSpeed * Time.deltaTime;
+                transform.localScale -= new Vector3(parachuteFallSpeed / 2, parachuteFallSpeed / 2) * Time.deltaTime;
+                fallBarFill.color = Color.white;
             }
 
             if (fallBarFill.fillAmount <= 0)
@@ -165,17 +181,6 @@ public class Player : MonoBehaviour
         }
 
         if (!landed) return;
-
-        //if (transform.position < ((inline.transform.localScale / 2) + inline.transform.position))
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (overItem)
-            {
-                PickupItem(overItem);
-                overItem = null;
-            }
-        }
 
         if (Input.GetMouseButton(0))
         {
@@ -332,6 +337,10 @@ public class Player : MonoBehaviour
         {
             overItem = collision.gameObject.GetComponent<Item>();
         }
+        else if (collision.gameObject.CompareTag("Door"))
+        {
+            selectedDoor = collision.gameObject.GetComponentInParent<Door>();
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -348,6 +357,11 @@ public class Player : MonoBehaviour
         {
             overItem = null;
         }
+        else if (collision.gameObject.CompareTag("Door"))
+        {
+            selectedDoor = null;
+        }
     }
 
+    Door selectedDoor;
 }

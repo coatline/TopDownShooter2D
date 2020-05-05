@@ -12,6 +12,7 @@ TagManager:
   - Land
   - DeathCircle
   - Eyes
+  - Door
   layers:
   - Default
   - TransparentFX

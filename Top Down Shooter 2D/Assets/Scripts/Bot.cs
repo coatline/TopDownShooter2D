@@ -26,6 +26,7 @@ public class Bot : MonoBehaviour
     public float speed = 0;
     public int health = 100;
 
+    [SerializeField] bool inWater;
     public bool landed = false;
     bool jumped = false;
 
@@ -259,6 +260,12 @@ public class Bot : MonoBehaviour
             {
                 currentTargetPlayer = ClosestAttacker();
             }
+            else if (Vector2.Distance(transform.position, currentTargetPlayer.transform.position) > 15)
+            {
+                attackers.Remove(currentTargetPlayer);
+
+                state = State.searchingForItems;
+            }
         }
         else
         {
@@ -270,9 +277,9 @@ public class Bot : MonoBehaviour
             {
                 if (state == State.goingToItem)
                 {
-                    if (HasGun() && attackers.Count > 0)
+                    if (!currentTargetItem)
                     {
-                        state = State.attacking;
+                        ReEvaluate();
                     }
                 }
                 else
@@ -297,20 +304,28 @@ public class Bot : MonoBehaviour
                         }
                         else
                         {
-                            if (state == State.searchingForItems)
+                            if (state == State.goingToLand)
                             {
-                                if (seenItems.Count > 0 || seenCrates.Count > 0)
-                                {
-                                    state = State.goingToItem;
-                                }
-
-                                CheckForMissingSeenItems();
-                                CheckForMissingSeenCrates();
                             }
                             else
                             {
-                                if (state == State.goingToLand)
+                                if (state == State.searchingForItems)
                                 {
+                                    if (seenItems.Count > 0 || seenCrates.Count > 0)
+                                    {
+                                        state = State.goingToItem;
+                                    }
+                                    if (inWater)
+                                    {
+                                        state = State.goingToLand;
+                                    }
+
+                                    CheckForMissingSeenItems();
+                                    CheckForMissingSeenCrates();
+                                }
+                                else
+                                {
+                                    state = State.searchingForItems;
                                 }
                             }
                         }
@@ -319,6 +334,42 @@ public class Bot : MonoBehaviour
             }
         }
 
+    }
+
+    void ReEvaluate()
+    {
+        if (state == State.pickingUpItem || state == State.goingToItem)
+        {
+            if (attackers.Count > 0)
+            {
+                if (HasGun())
+                {
+                    Attack();
+                }
+            }
+            else
+            {
+                if (inWater)
+                {
+                    state = State.goingToLand;
+                }
+                //else if (seenCrates.Count > 0)
+                //{
+                //    ChooseTargetCrate();
+                //    state = State.searchingForItems;
+                //}
+                //else if (seenItems.Count > 0)
+                //{
+                //    ChooseTargetItem();
+                //    state = State.searchingForItems;
+                //}
+                else
+                {
+                    state = State.searchingForItems;
+                }
+            }
+        }
+        //else if(state==State.)
     }
 
     void ChooseWhatItemToHold()
@@ -400,7 +451,7 @@ public class Bot : MonoBehaviour
 
     void Attack()
     {
-        if (!currentTargetPlayer || !HasGun()) { state = State.searchingForItems; return; }
+        if (!currentTargetPlayer || !HasGun()) { return; }
 
         if (!GunEquipped())
         {
@@ -427,7 +478,7 @@ public class Bot : MonoBehaviour
                 {
                     if (ChooseTargetCrate() == null)
                     {
-                        state = State.searchingForItems;
+                        ReEvaluate();
                         return;
                     }
                     else
@@ -457,8 +508,10 @@ public class Bot : MonoBehaviour
                 {
                     MoveTowards(currentTargetCrate.transform, 1);
                 }
-
-
+            }
+            else
+            {
+                ReEvaluate();
             }
         }
 
@@ -470,11 +523,8 @@ public class Bot : MonoBehaviour
             {
                 currentTargetItem = ChooseTargetItem();
             }
-            else
-            {
-                state = State.searchingForItems;
-            }
 
+            ReEvaluate();
             return;
         }
 
@@ -511,16 +561,9 @@ public class Bot : MonoBehaviour
     {
         MoveTowards(land.transform, 1);
 
-        if (Vector2.Distance(transform.position, land.transform.position) <= 199)
+        if (!inWater)
         {
-            if (seenItems.Count > 0)
-            {
-                state = State.goingToItem;
-            }
-            else
-            {
-                state = State.searchingForItems;
-            }
+            ReEvaluate();
         }
     }
 
@@ -531,11 +574,10 @@ public class Bot : MonoBehaviour
 
     void FleeFromEnemy()
     {
-        if (!ClosestAttacker()) { Intelligence(); return; }
+        if (!ClosestAttacker()) { ReEvaluate(); return; }
 
         if (attackers.Count == 0)
         {
-            state = State.searchingForItems;
         }
         else
         {
@@ -606,26 +648,28 @@ public class Bot : MonoBehaviour
     {
         //If I have a target item, pick it up
         //Otherwise, Choose a traget item that I have seen
+
         if (!currentTargetItem || currentTargetItem.pickedUp)
         {
             if (!currentTargetItem)
             {
                 if (ChooseTargetItem())
                 {
+                    ReEvaluate();
                     currentTargetItem = ChooseTargetItem();
                 }
                 else
                 {
-                    state = State.searchingForItems;
+                    ReEvaluate();
                     return;
                 }
             }
 
-            state = State.searchingForItems;
 
             if (currentTargetItem.pickedUp)
                 seenItems.Remove(currentTargetItem);
 
+            ReEvaluate();
             return;
         }
 
@@ -637,9 +681,8 @@ public class Bot : MonoBehaviour
         ShowCurrentItemInHand();
         currentTargetItem.PickUp();
         ChooseWhatItemToHold();
-
         seenItems.Remove(currentTargetItem);
-        state = State.searchingForItems;
+        ReEvaluate();
     }
 
     Item ChooseTargetItem()
@@ -789,7 +832,14 @@ public class Bot : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, angele + 90), Time.deltaTime * turnSpeed);
 
         var toTargeta = (target.position - transform.position).normalized;
-        transform.Translate(toTargeta * speed * Time.deltaTime * dir, Space.World);
+        if (items.Count > 0)
+        {
+            transform.Translate(toTargeta * speed * Time.deltaTime * dir, Space.World);
+        }
+        else
+        {
+            transform.Translate(toTargeta * (speed + 1) * Time.deltaTime * dir, Space.World);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -831,6 +881,10 @@ public class Bot : MonoBehaviour
                 seenCrates.Remove(crateScript);
             }
 
+        }
+        else if (collision.gameObject.CompareTag("Water"))
+        {
+            inWater = false;
         }
     }
 
@@ -880,12 +934,11 @@ public class Bot : MonoBehaviour
 
         else if (collision.gameObject.CompareTag("Water"))
         {
-            if (landed && collision.IsTouching(headbc))
+            if (landed)
             {
-                state = State.goingToLand;
-            }
-            else if (!landed)
-            {
+                print("enterseddsdfs");
+
+                inWater = true;
             }
 
             ChangeDir();

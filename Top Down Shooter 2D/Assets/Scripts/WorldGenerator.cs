@@ -6,6 +6,13 @@ using UnityEditor;
 
 public class WorldGenerator : MonoBehaviour
 {
+    [Range(0.1f, 200)]
+    [SerializeField] float noiseScale;
+    [Range(0, 1)]
+    [SerializeField] float waterThreshold;
+    [Range(0, 1)]
+    [SerializeField] float dirtThreshold;
+
     [SerializeField] GameObject cratePrefab;
     [SerializeField] Tilemap tilemap;
     [SerializeField] Tile grassTile;
@@ -17,6 +24,8 @@ public class WorldGenerator : MonoBehaviour
     [SerializeField] int crateCount;
     [SerializeField] int pathCount;
 
+    //[Range(0, 1)]
+    //[SerializeField] float grassThreshold = 0.8f;
     List<GameObject> crates;
 
     void OnEnable()
@@ -28,8 +37,9 @@ public class WorldGenerator : MonoBehaviour
     {
         Initiate();
         GenerateLand();
+        //GenerateAreas();
         GenerateCrates();
-        GeneratePaths();
+        //GeneratePaths();
     }
 
     void Initiate()
@@ -43,11 +53,13 @@ public class WorldGenerator : MonoBehaviour
 
     void GenerateLand()
     {
+        int offsetX = Random.Range(0, 100000);
+        int offsety = Random.Range(0, 100000);
         for (int y = 0; y < worldHeight; y++)
         {
             for (int x = 0; x < worldWidth; x++)
             {
-                tilemap.SetTile(new Vector3Int(x, y, 0), grassTile);
+                tilemap.SetTile(new Vector3Int(x, y, 0), GetTileType(offsetX + x, offsety + y));
             }
         }
     }
@@ -71,7 +83,7 @@ public class WorldGenerator : MonoBehaviour
         {
             for (int y = startingY; y < endingY; y++)
             {
-                tilemap.SetTile(new Vector3Int(x + (Random.Range(-1, 2)), y + (Random.Range(-1, 2)), 0), dirtTile);
+                tilemap.SetTile(new Vector3Int(x, y + Random.Range(-x, x), 0), dirtTile);
             }
         }
     }
@@ -98,9 +110,35 @@ public class WorldGenerator : MonoBehaviour
         }
     }
 
+    Tile GetTileType(int x, int y)
+    {
+        var val = Mathf.PerlinNoise((float)(x * noiseScale / worldHeight), (float)(y * noiseScale / worldHeight));
+
+        if (val < waterThreshold)
+        {
+            return waterTile;
+        }
+        else if (val < dirtThreshold)
+        {
+            return dirtTile;
+        }
+        else
+        {
+            return grassTile;
+        }
+    }
+
     void ClearMap()
     {
         tilemap.ClearAllTiles();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            ClearMap();
+            GenerateLand();
+        }
+    }
 }
