@@ -29,6 +29,7 @@ public class Bot : MonoBehaviour
     [SerializeField] bool inWater;
     public bool landed = false;
     bool jumped = false;
+    public bool dead;
 
     GameObject currentTargetPlayer;
     Crate currentTargetCrate;
@@ -98,6 +99,8 @@ public class Bot : MonoBehaviour
         rb.angularVelocity = 0;
         rb.velocity = Vector2.zero;
         trigger.gameObject.transform.rotation = Quaternion.identity;
+
+        if (dead) { return; }
 
         Intelligence();
         DoStates();
@@ -208,10 +211,15 @@ public class Bot : MonoBehaviour
 
     void Die()
     {
-        for (int i = 0; i < items.Count; i++)
+        if (!dead)
         {
-            items[i].Drop(transform);
+            for (int i = 0; i < items.Count; i++)
+            {
+                items[i].Drop(transform);
+            }
         }
+
+        dead = true;
 
         sd.DoDie();
     }

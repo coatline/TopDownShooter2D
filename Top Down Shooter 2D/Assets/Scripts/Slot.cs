@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using TMPro;
 
 public class Slot : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class Slot : MonoBehaviour
     GameObject playerHoldingPlace;
     public Item currentItemScript;
     Image backgroundImage;
+    TMP_Text amountText;
     Image imageScript;
     Image holderImage;
     bool selected;
@@ -19,6 +21,7 @@ public class Slot : MonoBehaviour
     private void Awake()
     {
         imageScript = GetComponent<Image>();
+        amountText = transform.GetChild(2).GetComponent<TMP_Text>();
         backgroundImage = transform.Find("Background Sprite").GetComponent<Image>();
         holderImage = transform.Find("Holder").GetComponent<Image>();
         playerHoldingPlace = FindObjectOfType<Player>().transform.Find("HoldingPlace").gameObject;
@@ -26,6 +29,13 @@ public class Slot : MonoBehaviour
 
     public void DestroyItem()
     {
+        UpdateAmountText(false);
+
+        if (currentItemScript.itemAmount > 1)
+        {
+            return;
+        }
+
         Destroy(currentItemScript.gameObject);
         currentItemScript = null;
 
@@ -42,6 +52,8 @@ public class Slot : MonoBehaviour
         {
             return;
         }
+
+        UpdateAmountText(true);
 
         currentItemScript.Drop(tra);
 
@@ -95,7 +107,7 @@ public class Slot : MonoBehaviour
         newItemScript.gameObject.SetActive(false);
 
         //WOULD CHANGE SPRITE TO SLOTSPRITE BUT DO NOT HAVE A DIFFERENT SPRITE FOR IT AT THE MOMENT
-        holderImage.sprite = newItemScript.groundSprite;
+        holderImage.sprite = newItemScript.slotSprite;
         holderImage.color = Color.white;
 
         //if already selected slot enable inhand sprite for gun
@@ -105,6 +117,20 @@ public class Slot : MonoBehaviour
         }
 
         SetColorToRarity(backgroundImage, newItemScript);
+
+        UpdateAmountText(false);
+    }
+
+    public void StackItem()
+    {
+        currentItemScript.itemAmount++;
+        UpdateAmountText(false);
+    }
+
+    public void UpdateAmountText(bool resetText)
+    {
+        if (currentItemScript.itemAmount <= 1 || resetText) { amountText.text = ""; return; }
+        amountText.text = $"{currentItemScript.itemAmount}";
     }
 
     void UpdateItemInHand()

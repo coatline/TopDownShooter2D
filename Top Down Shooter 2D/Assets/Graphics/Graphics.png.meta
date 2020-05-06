@@ -100,7 +100,31 @@ TextureImporter:
     second: Door
   - first:
       213: -7821212624033336381
+    second: SMGInSlot
+  - first:
+      213: -5210308757423107369
+    second: SMGInSlot
+  - first:
+      213: -5210308757423107369
+    second: SMGInSlot
+  - first:
+      213: -5210308757423107369
+    second: SMGinSlot
+  - first:
+      213: 258607806595193734
+    second: AKinSlot
+  - first:
+      213: -7821212624033336381
+    second: Wall
+  - first:
+      213: 5193563882017225563
     second: Graphics_0
+  - first:
+      213: 4403296636331044091
+    second: ShotguninSlot
+  - first:
+      213: 1337111784965413865
+    second: Graphics_1
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -203,10 +227,10 @@ TextureImporter:
       name: Head
       rect:
         serializedVersion: 2
-        x: 3
-        y: 489
-        width: 8
-        height: 8
+        x: 2
+        y: 488
+        width: 10
+        height: 10
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -523,7 +547,7 @@ TextureImporter:
         width: 14
         height: 8
       alignment: 9
-      pivot: {x: 0.4375, y: 0.5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -649,7 +673,7 @@ TextureImporter:
         width: 19
         height: 9
       alignment: 9
-      pivot: {x: 0.475, y: 0.5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -788,13 +812,34 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Graphics_0
+      name: SMGinSlot
       rect:
         serializedVersion: 2
-        x: 50
-        y: 359
-        width: 61
-        height: 8
+        x: 168
+        y: 483
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d250bf5ac341b7b0800000000000000
+      internalID: -5210308757423107369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wall
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 385
+        width: 4
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -804,6 +849,69 @@ TextureImporter:
       bones: []
       spriteID: 3c331b79e88757390800000000000000
       internalID: -7821212624033336381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Graphics_0
+      rect:
+        serializedVersion: 2
+        x: 348
+        y: 356
+        width: 152
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5b7fe185de331840800000000000000
+      internalID: 5193563882017225563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AKinSlot
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 483
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68bdf301e62c69300800000000000000
+      internalID: 258607806595193734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShotguninSlot
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 483
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bfc2f2906f6ab1d30800000000000000
+      internalID: 4403296636331044091
       vertices: []
       indices: 
       edges: []

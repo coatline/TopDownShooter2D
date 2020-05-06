@@ -7,6 +7,7 @@ public class Item : MonoBehaviour
     //rarity is chance to drop
     public Sprite groundSprite;
     public Sprite inHandSprite;
+    public int itemAmount = 1;
     public Sprite slotSprite;
     public string itemType;
     public string itemName;

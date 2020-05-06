@@ -167,7 +167,9 @@ MonoBehaviour:
     type: 3}
   inHandSprite: {fileID: 3496107813341591016, guid: 918068b0049524b4681bcfc7b5baea89,
     type: 3}
-  slotSprite: {fileID: 0}
+  itemAmount: 1
+  slotSprite: {fileID: 258607806595193734, guid: 918068b0049524b4681bcfc7b5baea89,
+    type: 3}
   itemType: Gun
   itemName: AK
   rarity: 

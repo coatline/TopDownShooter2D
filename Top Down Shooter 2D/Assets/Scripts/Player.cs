@@ -190,14 +190,32 @@ public class Player : MonoBehaviour
                 {
                     selectedSlot.currentItemScript.GetComponent<Gun>().Shoot(bulletHole, this.gameObject, false, a);
                 }
-                else if (selectedSlot.currentItemScript.itemType == "Healing")
+
+            }
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (selectedSlot.currentItemScript)
+            {
+                if (selectedSlot.currentItemScript.itemType == "Healing")
                 {
                     var script = selectedSlot.currentItemScript.GetComponent<Healing>();
 
                     if ((script.isShield && shield >= 100) || (!script.isShield && health >= 100)) { return; }
 
                     Heal(selectedSlot.currentItemScript.GetComponent<Healing>().amount, selectedSlot.currentItemScript.GetComponent<Healing>().isShield);
-                    selectedSlot.DestroyItem();
+
+                    selectedSlot.currentItemScript.itemAmount--;
+
+                    if (selectedSlot.currentItemScript.itemAmount == 0)
+                    {
+                        selectedSlot.DestroyItem();
+                    }
+                    else
+                    {
+                        selectedSlot.UpdateAmountText(false);
+                    }
                 }
             }
         }
@@ -320,7 +338,24 @@ public class Player : MonoBehaviour
     void PickupItem(Item item)
     {
         item.PickUp();
-        sm.OpenSlot().ChangeItem(transform, item, sm.selectedSlot);
+
+        if (item.itemType == "Healing")
+        {
+            var slot = sm.ContatinsItem(item);
+
+            if (slot)
+            {
+                slot.StackItem();
+            }
+            else
+            {
+                sm.OpenSlot().ChangeItem(transform, item, sm.selectedSlot);
+            }
+        }
+        else
+        {
+            sm.OpenSlot().ChangeItem(transform, item, sm.selectedSlot);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

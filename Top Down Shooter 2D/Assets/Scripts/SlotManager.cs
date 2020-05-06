@@ -50,6 +50,21 @@ public class SlotManager : MonoBehaviour
         return selectedSlot;
     }
 
+    public Slot ContatinsItem(Item item)
+    {
+        for (int i = 0; i < slots.Count; i++)
+        {
+            if (!slots[i].currentItemScript) { continue; }
+
+            if (slots[i].currentItemScript.itemName == item.itemName)
+            {
+                return slots[i];
+            }
+        }
+
+        return null;
+    }
+
     void ChangeSelected(int amount)
     {
         selectedSlot.DeSelect();

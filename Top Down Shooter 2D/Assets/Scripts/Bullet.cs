@@ -26,7 +26,7 @@ public class Bullet : MonoBehaviour
     {
         var collisionGameobjectTag = collision.gameObject.tag;
 
-        if (collisionGameobjectTag == "Bullet" || collisionGameobjectTag == "Pickupable" || collisionGameobjectTag == "Eyes" || collisionGameobjectTag == "DeathCircle" || collisionGameobjectTag == "Water" || dying || !player) { return; }
+        if (collisionGameobjectTag == "Bullet" || collisionGameobjectTag == "Pickupable" || collisionGameobjectTag == "Eyes" || collisionGameobjectTag == "DeathCircle" || collisionGameobjectTag == "Water" || dying || !player || collisionGameobjectTag == "Door") { return; }
 
         else
         {
@@ -53,7 +53,7 @@ public class Bullet : MonoBehaviour
             {
                 var botScript = collision.gameObject.GetComponentInParent<Bot>();
 
-                if (botScript.health - dmg <= 0)
+                if (botScript.health - dmg <= 0 && !botScript.dead)
                 {
                     if (botBullet)
                     {

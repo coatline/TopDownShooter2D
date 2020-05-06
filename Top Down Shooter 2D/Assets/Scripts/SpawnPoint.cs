@@ -23,6 +23,7 @@ public class SpawnPoint : MonoBehaviour
                 Instantiate(obj, transform.position, Quaternion.identity);
             }
         }
+
         Destroy(gameObject);
     }
 }
