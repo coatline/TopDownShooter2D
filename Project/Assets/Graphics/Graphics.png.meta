@@ -1,0 +1,971 @@
+fileFormatVersion: 2
+guid: 918068b0049524b4681bcfc7b5baea89
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4134470982481670237
+    second: Head
+  - first:
+      213: -6480627333823559350
+    second: Arm
+  - first:
+      213: 9000193383291420153
+    second: Plane
+  - first:
+      213: 2785487252444896389
+    second: Ground
+  - first:
+      213: -4471634583465917618
+    second: Parachute
+  - first:
+      213: 8109156625128792913
+    second: FallBarFill
+  - first:
+      213: 5997688581893539255
+    second: Outer Bar
+  - first:
+      213: -8229457608874595268
+    second: Slot
+  - first:
+      213: -768287472138149725
+    second: Bullet
+  - first:
+      213: -3592807651587392686
+    second: Background
+  - first:
+      213: -7820513185573022212
+    second: GroundTestGunSprite
+  - first:
+      213: 2834093059825265682
+    second: HandTestGunSprite
+  - first:
+      213: 6106740496235502331
+    second: Crate
+  - first:
+      213: -7717128300933111095
+    second: OutlineofTestGun
+  - first:
+      213: 2030888209510114989
+    second: HealthUi
+  - first:
+      213: -95492438861738970
+    second: HealthBarFill
+  - first:
+      213: -1532871814036151470
+    second: HealthKit
+  - first:
+      213: -1149981725733453089
+    second: BigShieldSprite
+  - first:
+      213: 5571572480089642066
+    second: TestSMGGround
+  - first:
+      213: 4739694132180214966
+    second: TestSMGOutline
+  - first:
+      213: -1325375620925863998
+    second: TestSMGInHand
+  - first:
+      213: -8662075319188904508
+    second: WhitePixel
+  - first:
+      213: -4065532280177297973
+    second: Mini Potion
+  - first:
+      213: 2898370165963198593
+    second: FallBarOutline
+  - first:
+      213: 4802530450178700827
+    second: AK
+  - first:
+      213: -4840755722785979222
+    second: AKOutline
+  - first:
+      213: 3496107813341591016
+    second: AKInHand
+  - first:
+      213: -6062243989588575855
+    second: KillCounterGraphic
+  - first:
+      213: -3594290396847044552
+    second: Shotgun_Outline
+  - first:
+      213: -2878749601138285865
+    second: Shotgun
+  - first:
+      213: 2510310716856052990
+    second: ShotgunInHand
+  - first:
+      213: 5463643145767916427
+    second: Door
+  - first:
+      213: -7821212624033336381
+    second: SMGInSlot
+  - first:
+      213: -5210308757423107369
+    second: SMGInSlot
+  - first:
+      213: -5210308757423107369
+    second: SMGInSlot
+  - first:
+      213: -5210308757423107369
+    second: SMGinSlot
+  - first:
+      213: 258607806595193734
+    second: AKinSlot
+  - first:
+      213: -7821212624033336381
+    second: Wall
+  - first:
+      213: 5193563882017225563
+    second: Graphics_0
+  - first:
+      213: 4403296636331044091
+    second: ShotguninSlot
+  - first:
+      213: 1337111784965413865
+    second: Graphics_1
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 10
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Head
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 488
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cfc279f01fc95d943aee7b2faf8424d6
+      internalID: 4134470982481670237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Arm
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 495
+        width: 2
+        height: 3
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5415571708f740240a335513153480a5
+      internalID: -6480627333823559350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Plane
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 313
+        width: 46
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1953ced0908dc64aa665e7dc211db27
+      internalID: 9000193383291420153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ground
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 242
+        width: 10
+        height: 10
+      alignment: 9
+      pivot: {x: 0.49135083, y: 0.507692}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e31dd2fc296e9274dbe7e72bb17f6659
+      internalID: 2785487252444896389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Parachute
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 485
+        width: 26
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a83aee2d533a7694197ceb92eaf6ba70
+      internalID: -4471634583465917618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FallBarFill
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 476
+        width: 12
+        height: 1
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9fca6ce6b1f5eb545b3f6823a5ac57f7
+      internalID: 8109156625128792913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slot
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 479
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b565d85a690b6d4c9be59398a3956e6
+      internalID: -8229457608874595268
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullet
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 480
+        width: 3
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e796ac74b23d534f9d0a91beb9db1e1
+      internalID: -768287472138149725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Background
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 197
+        width: 1
+        height: 1
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d677b27b69e97244fbe68fdf8fb3fe47
+      internalID: -3592807651587392686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Crate
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 458
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab9903dd256f4df49ae6803b60fda0dc
+      internalID: 6106740496235502331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealthUi
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 443
+        width: 27
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2ac20bf8596c334db7dcf2f1f02d5a8
+      internalID: 2030888209510114989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealthBarFill
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 458
+        width: 25
+        height: 2
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04ea9805889035f418c4a135c65b3104
+      internalID: -95492438861738970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealthKit
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 424
+        width: 5
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43f1fbe0f0fa30547a9d75fc23988a29
+      internalID: -1532871814036151470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BigShieldSprite
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 424
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d66e50e06d96dae4ab0cf137c5368bfb
+      internalID: -1149981725733453089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TestSMGGround
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 489
+        width: 12
+        height: 6
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 331f002d19e00e14ab604b20743687dc
+      internalID: 5571572480089642066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TestSMGOutline
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 480
+        width: 14
+        height: 8
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b770d5548abd4c148a202d1d25ca0baf
+      internalID: 4739694132180214966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TestSMGInHand
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 484
+        width: 2
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60ea67fec0f0cdc48aee85cf6c19efe7
+      internalID: -1325375620925863998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhitePixel
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 499
+        width: 1
+        height: 1
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 769ed1608509f7b4f85bcc5c1db95177
+      internalID: -8662075319188904508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mini Potion
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 424
+        width: 2
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0805f2a5e2b8f4c42ade45c7184a263b
+      internalID: -4065532280177297973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FallBarOutline
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 471
+        width: 14
+        height: 3
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91315d945529d414a97e2f682c3aba93
+      internalID: 2898370165963198593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AK
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 461
+        width: 17
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b16f5e1eff306a240800000000000000
+      internalID: 4802530450178700827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AKOutline
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 451
+        width: 19
+        height: 9
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa407ea415e22dcb0800000000000000
+      internalID: -4840755722785979222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AKInHand
+      rect:
+        serializedVersion: 2
+        x: 121
+        y: 451
+        width: 2
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e571b6788ba48030800000000000000
+      internalID: 3496107813341591016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: KillCounterGraphic
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 446
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19973dae5359edba0800000000000000
+      internalID: -6062243989588575855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shotgun_Outline
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 431
+        width: 20
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 838855c6de38e1ec0800000000000000
+      internalID: -3594290396847044552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShotgunInHand
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 437
+        width: 2
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d2ead27d70ac08d0800000000000000
+      internalID: 2510310716856052990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shotgun
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 440
+        width: 18
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efcaf0afb4a66d220800000000000000
+      internalID: -2878749601138285865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 352
+        width: 21
+        height: 6
+      alignment: 9
+      pivot: {x: 0.05, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b839ef25e72c2db40800000000000000
+      internalID: 5463643145767916427
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SMGinSlot
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 483
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d250bf5ac341b7b0800000000000000
+      internalID: -5210308757423107369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wall
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 385
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c331b79e88757390800000000000000
+      internalID: -7821212624033336381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Graphics_0
+      rect:
+        serializedVersion: 2
+        x: 348
+        y: 356
+        width: 152
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5b7fe185de331840800000000000000
+      internalID: 5193563882017225563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AKinSlot
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 483
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68bdf301e62c69300800000000000000
+      internalID: 258607806595193734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShotguninSlot
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 483
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bfc2f2906f6ab1d30800000000000000
+      internalID: 4403296636331044091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: b16edbcc7590f0046a870a7ca41323b4
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      ShotgunInHand: 2510310716856052990
+      Crate: 6106740496235502331
+      HealthBarFill: -95492438861738970
+      HealthKit: -1532871814036151470
+      Head: 4134470982481670237
+      WhitePixel: -8662075319188904508
+      AKinSlot: 258607806595193734
+      Shotgun_Outline: -3594290396847044552
+      Bullet: -768287472138149725
+      FallBarFill: 8109156625128792913
+      Door: 5463643145767916427
+      Mini Potion: -4065532280177297973
+      Plane: 9000193383291420153
+      Arm: -6480627333823559350
+      TestSMGGround: 5571572480089642066
+      TestSMGOutline: 4739694132180214966
+      AKInHand: 3496107813341591016
+      ShotguninSlot: 4403296636331044091
+      HealthUi: 2030888209510114989
+      Slot: -8229457608874595268
+      Graphics_0: 5193563882017225563
+      SMGinSlot: -5210308757423107369
+      FallBarOutline: 2898370165963198593
+      Parachute: -4471634583465917618
+      Background: -3592807651587392686
+      KillCounterGraphic: -6062243989588575855
+      Shotgun: -2878749601138285865
+      Wall: -7821212624033336381
+      Ground: 2785487252444896389
+      TestSMGInHand: -1325375620925863998
+      AK: 4802530450178700827
+      AKOutline: -4840755722785979222
+      BigShieldSprite: -1149981725733453089
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
