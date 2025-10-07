@@ -127,7 +127,7 @@ public class Player : MonoBehaviour
 
         movement = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-        rb.velocity = movement.normalized * speed;
+        rb.linearVelocity = movement.normalized * speed;
 
         LookAtMouse();
 

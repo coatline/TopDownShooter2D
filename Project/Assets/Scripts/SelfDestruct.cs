@@ -34,7 +34,7 @@ public class SelfDestruct : MonoBehaviour
 
         if (GetComponent<Rigidbody2D>())
         {
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
         }
 

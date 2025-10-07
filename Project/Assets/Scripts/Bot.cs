@@ -97,7 +97,7 @@ public class Bot : MonoBehaviour
     void Update()
     {
         rb.angularVelocity = 0;
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
         trigger.gameObject.transform.rotation = Quaternion.identity;
 
         if (dead) { return; }
@@ -423,7 +423,7 @@ public class Bot : MonoBehaviour
     {
         if (state == State.searchingForItems)
         {
-            rb.velocity = new Vector2(transform.up.x, transform.up.y) * groundWalkSpeed;
+            rb.linearVelocity = new Vector2(transform.up.x, transform.up.y) * groundWalkSpeed;
 
             if (!startedCoroutine)
             {
