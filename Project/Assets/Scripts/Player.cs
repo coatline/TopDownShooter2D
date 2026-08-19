@@ -8,7 +8,6 @@ using TMPro;
 public class Player : MonoBehaviour
 {
     [SerializeField] Canvas worldSpaceCanvas = null;
-    [SerializeField] TMP_Text killCountText = null;
     [SerializeField] Sprite parachuteSprite = null;
     [SerializeField] TMP_Text bottomText = null;
     [SerializeField] Image fallBarPrefab = null;
@@ -29,6 +28,8 @@ public class Player : MonoBehaviour
 
     public bool landed;
     public bool jumped;
+    public static bool dead;
+    public static bool won;
 
     public int health = 100;
     public int shield = 0;
@@ -40,19 +41,12 @@ public class Player : MonoBehaviour
     public float groundWalkSpeed = 0;
     public float speed = 0;
     float gasTimer;
+    float healTimer;
 
     void Awake()
     {
-        var tmpTexts = FindObjectsOfType<TMP_Text>();
-
-        for (int i = 0; i < tmpTexts.Length; i++)
-        {
-            if (tmpTexts[i].name == "KillCounterText")
-            {
-                killCountText = tmpTexts[i];
-                break;
-            }
-        }
+        dead = false;
+        won = false;
 
         ah = FindObjectOfType<AudioHandler>();
         a = GetComponent<AudioSource>();
@@ -71,12 +65,35 @@ public class Player : MonoBehaviour
     {
         Inputs();
         CheckForStormDamage();
+        UpdatePickupPrompt();
+    }
+
+    void UpdatePickupPrompt()
+    {
+        if (won) { return; }
+
+        if (landed)
+        {
+            if (overItem)
+                bottomText.text = $"'E' ({overItem.itemName})";
+            else if (selectedDoor)
+                bottomText.text = $"'E' (open door)";
+            else
+            {
+                bottomText.gameObject.SetActive(false);
+                return;
+            }
+            bottomText.gameObject.SetActive(true);
+        }
+        else if (landed)
+        {
+            bottomText.gameObject.SetActive(false);
+        }
     }
 
     public void KilledEnemy()
     {
         kills++;
-        killCountText.text = $"{kills}";
     }
 
     float stormTimer;
@@ -87,7 +104,7 @@ public class Player : MonoBehaviour
         {
             if (stormTimer > 1)
             {
-                TakeDmg(1);
+                TakeDmg(5);
                 stormTimer = 0;
             }
             else
@@ -139,7 +156,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E))
         {
             if (landed)
             {
@@ -186,12 +203,29 @@ public class Player : MonoBehaviour
         {
             if (selectedSlot.currentItemScript)
             {
-                selectedSlot.currentItemScript.Use(this);
+                var item = selectedSlot.currentItemScript;
+
+                if (item.itemType == "Healing")
+                {
+                    if (healTimer > 0)
+                    {
+                        healTimer -= Time.deltaTime;
+                    }
+                    else if (item.Use(this))
+                    {
+                        healTimer = 0.35f;
+                        selectedSlot.DestroyItem();
+                    }
+                }
+                else
+                {
+                    item.Use(this);
+                }
             }
         }
     }
 
-    void Heal(int amount, bool isShield)
+    public bool Heal(int amount, bool isShield)
     {
         if (isShield && shield < 100)
         {
@@ -209,8 +243,13 @@ public class Player : MonoBehaviour
                 health = 100;
             }
         }
+        else
+        {
+            return false;
+        }
 
         UpdateHealthUI();
+        return true;
     }
 
     public void TakeDmg(int damage)
@@ -243,12 +282,66 @@ public class Player : MonoBehaviour
 
     void Die()
     {
+        dead = true;
+
         for (int i = 0; i < sm.slots.Count; i++)
         {
             sm.slots[i].DropItem(transform);
         }
 
+        if (!won)
+        {
+            ShowDeathUI();
+        }
+
         Destroy(gameObject);
+    }
+
+    public void ShowWinUI()
+    {
+        won = true;
+
+        if (!bottomText) { return; }
+
+        var winText = Instantiate(bottomText.gameObject, bottomText.transform.parent);
+        var rect = winText.GetComponent<RectTransform>();
+        rect.anchorMin = new Vector2(0.5f, 0.5f);
+        rect.anchorMax = new Vector2(0.5f, 0.5f);
+        rect.anchoredPosition = Vector2.zero;
+        rect.sizeDelta = new Vector2(500, 80);
+
+        var winTxt = winText.GetComponent<TMP_Text>();
+        winTxt.horizontalAlignment = HorizontalAlignmentOptions.Center;
+        winTxt.verticalAlignment = VerticalAlignmentOptions.Top;
+        winTxt.text = "You win!";
+        winTxt.fontSize = 70;
+        winTxt.color = Color.yellow;
+
+        bottomText.gameObject.SetActive(true);
+        bottomText.text = "Press R to restart";
+    }
+
+    void ShowDeathUI()
+    {
+        if (!bottomText) { return; }
+
+        var diedText = Instantiate(bottomText.gameObject, bottomText.transform.parent);
+        var rect = diedText.GetComponent<RectTransform>();
+        rect.anchorMin = new Vector2(0.5f, 0.5f);
+        rect.anchorMax = new Vector2(0.5f, 0.5f);
+        rect.anchoredPosition = Vector2.zero;
+        diedText.GetComponent<TMP_Text>().fontSize = 10;
+        diedText.GetComponent<TMP_Text>().horizontalAlignment = HorizontalAlignmentOptions.Center;
+        diedText.GetComponent<TMP_Text>().verticalAlignment = VerticalAlignmentOptions.Top;
+        rect.sizeDelta = new Vector2(500, 80);
+
+        var diedTxt = diedText.GetComponent<TMP_Text>();
+        diedTxt.text = "You died";
+        diedTxt.fontSize = 70;
+        diedTxt.color = Color.red;
+
+        bottomText.gameObject.SetActive(true);
+        bottomText.text = "Press R to restart";
     }
 
     void UpdateHealthUI()

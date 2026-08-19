@@ -56,6 +56,11 @@ public class Bot : MonoBehaviour
     List<Item> seenItems;
     List<GameObject> attackers;
     List<Item> items = null;
+    int blockingMask;
+    Vector3 lastMovePos;
+    float stuckTimer;
+    float ignoreTimer;
+    GameObject ignoredAttacker;
 
     void Awake()
     {
@@ -70,6 +75,8 @@ public class Bot : MonoBehaviour
         bulletHole = transform.Find("BulletHole").gameObject;
 
         land = GameObject.FindGameObjectWithTag("Land");
+
+        blockingMask = LayerMask.GetMask("Default", "Crate");
 
         sd = GetComponent<SelfDestruct>();
         sr = GetComponent<SpriteRenderer>();
@@ -93,6 +100,7 @@ public class Bot : MonoBehaviour
     }
 
     bool startedCoroutine;
+    float noticeTimer;
 
     void Update()
     {
@@ -102,6 +110,24 @@ public class Bot : MonoBehaviour
 
         if (dead) { return; }
 
+        noticeTimer += Time.deltaTime;
+
+        if (noticeTimer >= 0.5f)
+        {
+            noticeTimer = 0;
+            NoticeEnemies();
+        }
+
+        if (ignoreTimer > 0)
+        {
+            ignoreTimer -= Time.deltaTime;
+        }
+
+        if (state == State.attacking)
+        {
+            CheckIfStuck();
+        }
+
         Intelligence();
         DoStates();
         CheckForStormDamage();
@@ -109,6 +135,74 @@ public class Bot : MonoBehaviour
         if (jumped && !landed)
         {
             Fall();
+        }
+    }
+
+    void CheckIfStuck()
+    {
+        if (!currentTargetPlayer) { return; }
+
+        if (Vector2.Distance(transform.position, currentTargetPlayer.transform.position) < 0.2f) { return; }
+
+        var moved = Vector2.Distance(transform.position, lastMovePos);
+        lastMovePos = transform.position;
+
+        if (moved < 0.02f)
+        {
+            stuckTimer += Time.deltaTime;
+
+            if (stuckTimer > 1f)
+            {
+                GiveUpOnTarget();
+            }
+        }
+        else
+        {
+            stuckTimer = 0;
+        }
+    }
+
+    void GiveUpOnTarget()
+    {
+        stuckTimer = 0;
+        ignoreTimer = 2f;
+        ignoredAttacker = currentTargetPlayer;
+
+        attackers.Remove(currentTargetPlayer);
+        currentTargetPlayer = null;
+
+        state = State.searchingForItems;
+    }
+
+    void NoticeEnemies()
+    {
+        if (!landed) { return; }
+
+        var hits = Physics2D.OverlapCircleAll(transform.position, 20, LayerMask.GetMask("Player"));
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            var go = hits[i].gameObject;
+
+            if (go.tag != "Player" && go.tag != "Bot") { continue; }
+
+            if (!go.transform.parent) { continue; }
+
+            var target = go.transform.parent.gameObject;
+
+            if (target == gameObject) { continue; }
+
+            if (target == ignoredAttacker && ignoreTimer > 0) { continue; }
+
+            if (target.tag == "Player" && Player.dead) { continue; }
+
+            var botScript = target.GetComponent<Bot>();
+            if (botScript && botScript.dead) { continue; }
+
+            if (!attackers.Contains(target))
+            {
+                attackers.Add(target);
+            }
         }
     }
 
@@ -171,7 +265,7 @@ public class Bot : MonoBehaviour
         {
             if (stormTimer > 1)
             {
-                TakeDmg(1);
+                TakeDmg(3);
                 stormTimer = 0;
             }
             else
@@ -201,8 +295,6 @@ public class Bot : MonoBehaviour
             health -= damage;
         }
 
-        health -= damage;
-
         if (health <= 0)
         {
             Die();
@@ -228,9 +320,18 @@ public class Bot : MonoBehaviour
     {
         //Attack GetItems SearchforItems FleeFromEnemy RunFromStorm
 
+        if (!DeathCircle.isInsideSafeZone_Static(transform.position))
+        {
+            if (state != State.attacking)
+            {
+                state = State.fleeingFromStorm;
+                return;
+            }
+        }
+
         if (state == State.fleeingFromStorm)
         {
-            if (DeathCircle.isInsideSafeZone_Static(transform.position) && state != State.pickingUpItem || state != State.attacking || state != State.fleeingFromEnemy)
+            if (DeathCircle.isInsideSafeZone_Static(transform.position))
             {
                 state = State.searchingForItems;
             }
@@ -268,12 +369,6 @@ public class Bot : MonoBehaviour
             {
                 currentTargetPlayer = ClosestAttacker();
             }
-            else if (Vector2.Distance(transform.position, currentTargetPlayer.transform.position) > 15)
-            {
-                attackers.Remove(currentTargetPlayer);
-
-                state = State.searchingForItems;
-            }
         }
         else
         {
@@ -306,42 +401,34 @@ public class Bot : MonoBehaviour
                     }
                     else
                     {
-                        if ((!DeathCircle.isInsideSafeZone_Static(transform.position) && DeathCircle.IsMoving_Static()) || DeathCircle.IsOutsideCircle_Static(transform.position))
+                        if (state == State.goingToLand)
                         {
-                            state = State.fleeingFromStorm;
                         }
                         else
                         {
-                            if (state == State.goingToLand)
+                            if (state == State.searchingForItems)
                             {
-                            }
-                            else
-                            {
-                                if (state == State.searchingForItems)
+                                if (seenItems.Count > 0 || seenCrates.Count > 0)
                                 {
-                                    if (seenItems.Count > 0 || seenCrates.Count > 0)
-                                    {
-                                        state = State.goingToItem;
-                                    }
-                                    if (inWater)
-                                    {
-                                        state = State.goingToLand;
-                                    }
+                                    state = State.goingToItem;
+                                }
+                                if (inWater)
+                                {
+                                    state = State.goingToLand;
+                                }
 
-                                    CheckForMissingSeenItems();
-                                    CheckForMissingSeenCrates();
-                                }
-                                else
-                                {
-                                    state = State.searchingForItems;
-                                }
+                                CheckForMissingSeenItems();
+                                CheckForMissingSeenCrates();
+                            }
+                            else if (state != State.fleeingFromStorm)
+                            {
+                                state = State.searchingForItems;
                             }
                         }
                     }
                 }
             }
         }
-
     }
 
     void ReEvaluate()
@@ -461,9 +548,33 @@ public class Bot : MonoBehaviour
         currentTargetPlayer = null;
     }
 
+    public void AddAttacker(GameObject attacker)
+    {
+        if (!attacker || attacker == gameObject) { return; }
+
+        if (IsDeadTarget(attacker)) { return; }
+
+        if (!attackers.Contains(attacker))
+        {
+            attackers.Add(attacker);
+        }
+    }
+
     void Attack()
     {
         if (!currentTargetPlayer || !HasGun()) { return; }
+
+        if (IsDeadTarget(currentTargetPlayer))
+        {
+            GiveUpOnTarget();
+            return;
+        }
+
+        if (!HasLineOfSight())
+        {
+            GiveUpOnTarget();
+            return;
+        }
 
         if (!GunEquipped())
         {
@@ -478,6 +589,15 @@ public class Bot : MonoBehaviour
         {
             MoveTowards(currentTargetPlayer.transform, 1);
         }
+    }
+
+    bool HasLineOfSight()
+    {
+        var dir = currentTargetPlayer.transform.position - transform.position;
+
+        var hit = Physics2D.Raycast(transform.position, dir.normalized, dir.magnitude, blockingMask);
+
+        return !hit;
     }
 
     void GoToItem()
@@ -759,6 +879,12 @@ public class Bot : MonoBehaviour
                 continue;
             }
 
+            if (IsDeadTarget(attackers[i]))
+            {
+                attackers.RemoveAt(i);
+                continue;
+            }
+
             if (!closest)
             {
                 closest = attackers[i];
@@ -771,6 +897,16 @@ public class Bot : MonoBehaviour
         }
 
         return closest;
+    }
+
+    bool IsDeadTarget(GameObject target)
+    {
+        var botScript = target.GetComponent<Bot>();
+        if (botScript && botScript.dead) { return true; }
+
+        if (target.GetComponent<Player>() && Player.dead) { return true; }
+
+        return false;
     }
 
     IEnumerator Search()
@@ -836,7 +972,7 @@ public class Bot : MonoBehaviour
         if ((transform.position - target.transform.position).magnitude < .1f) { return; }
 
         Vector3 dire = (transform.position - target.position);
-        
+
         if (dir == -1)
         {
             dire = -dire;
@@ -862,6 +998,23 @@ public class Bot : MonoBehaviour
         if (collision.gameObject.CompareTag("Crate"))
         {
             collision.gameObject.GetComponent<Crate>().Open();
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (!landed) { return; }
+
+        if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Bot"))
+        {
+            if (!collision.gameObject.transform.parent) { return; }
+
+            var target = collision.gameObject.transform.parent.gameObject;
+
+            if (target != gameObject && !attackers.Contains(target) && !IsDeadTarget(target))
+            {
+                attackers.Add(target);
+            }
         }
     }
 
@@ -901,6 +1054,17 @@ public class Bot : MonoBehaviour
         {
             inWater = false;
         }
+        else if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Bot"))
+        {
+            if (!collision.gameObject.transform.parent) { return; }
+
+            var target = collision.gameObject.transform.parent.gameObject;
+
+            if (attackers.Contains(target))
+            {
+                attackers.Remove(target);
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -930,21 +1094,17 @@ public class Bot : MonoBehaviour
 
         if (landed)
         {
-            if (collision.gameObject.CompareTag("Player"))
+            if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Bot"))
             {
-                if (!attackers.Contains(collision.gameObject))
-                {
-                    attackers.Add(collision.gameObject.transform.parent.gameObject);
-                }
-            }
-            else if (collision.gameObject.CompareTag("Bot"))
-            {
-                if (!attackers.Contains(collision.gameObject))
-                {
-                    attackers.Add(collision.gameObject.transform.parent.gameObject);
-                }
-            }
+                if (!collision.gameObject.transform.parent) { return; }
 
+                var target = collision.gameObject.transform.parent.gameObject;
+
+                if (target != gameObject && !attackers.Contains(target) && !IsDeadTarget(target))
+                {
+                    attackers.Add(target);
+                }
+            }
         }
 
         else if (collision.gameObject.CompareTag("Water"))

@@ -29,9 +29,10 @@ public class ItemDisplay : MonoBehaviour
 
     public void DestroyItem()
     {
+        currentItemScript.itemAmount--;
         UpdateAmountText(false);
 
-        if (currentItemScript.itemAmount > 1)
+        if (currentItemScript.itemAmount > 0)
         {
             return;
         }

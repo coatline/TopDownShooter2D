@@ -50,11 +50,11 @@ public class Item : MonoBehaviour
         transform.position = playerTransform.position + new Vector3(Random.Range(-.5f, .5f), Random.Range(-.5f, .5f));
     }
 
-    public void Use(Player player = null, Bot bot = null)
+    public bool Use(Player player = null, Bot bot = null)
     {
         if (itemType == "Healing")
         {
-            GetComponent<Healing>().Heal(player, bot);
+            return GetComponent<Healing>().Heal(player, bot);
         }
         else
         {
@@ -62,6 +62,8 @@ public class Item : MonoBehaviour
                 gun.Shoot(player.bulletHole, player.gameObject, false, player.a);
             else
                 gun.Shoot(bot.bulletHole, bot.gameObject, false, bot.a);
+
+            return true;
         }
     }
 }

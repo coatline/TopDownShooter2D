@@ -7,29 +7,28 @@ public class Healing : MonoBehaviour
     public bool isShield;
     public int amount;
 
-    public void Heal(Player player = null, Bot bot = null)
+    public bool Heal(Player player = null, Bot bot = null)
     {
-        if (isShield)
+        if (player)
         {
-            if (player)
-            {
-                player.shield += amount;
-            }
-            else
-            {
-                bot.shield += amount;
-            }
+            return player.Heal(amount, isShield);
         }
         else
         {
-            if (player)
+            if (isShield)
             {
-                player.health += amount;
+                if (bot.shield >= 100) { return false; }
+                bot.shield += amount;
+                if (bot.shield > 100) { bot.shield = 100; }
             }
             else
             {
+                if (bot.health >= 100) { return false; }
                 bot.health += amount;
+                if (bot.health > 100) { bot.health = 100; }
             }
+
+            return true;
         }
     }
 }

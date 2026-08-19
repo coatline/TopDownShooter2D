@@ -34,6 +34,8 @@ public class Bullet : MonoBehaviour
             {
                 var playerScript = collision.gameObject.GetComponentInParent<Player>();
 
+                if (!playerScript || playerScript.gameObject == player) { return; }
+
                 if (playerScript.health - dmg <= 0)
                 {
                     if (botBullet)
@@ -53,6 +55,8 @@ public class Bullet : MonoBehaviour
             {
                 var botScript = collision.gameObject.GetComponentInParent<Bot>();
 
+                if (!botScript || botScript.gameObject == player) { return; }
+
                 if (botScript.health - dmg <= 0 && !botScript.dead)
                 {
                     if (botBullet)
@@ -66,6 +70,7 @@ public class Bullet : MonoBehaviour
                 }
 
                 botScript.TakeDmg(dmg);
+                botScript.AddAttacker(player);
                 Destroy(gameObject);
             }
 
